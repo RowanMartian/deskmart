@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>CFBundleName</key><string>Pearfin</string>
+  <key>CFBundleDisplayName</key><string>Pearfin</string>
+  <key>CFBundleIdentifier</key><string>app.pearfin.mac</string>
+  <key>CFBundleVersion</key><string>__VERSION__</string>
+  <key>CFBundleShortVersionString</key><string>__VERSION__</string>
+  <key>CFBundlePackageType</key><string>APPL</string>
+  <key>CFBundleExecutable</key><string>Pearfin</string>
+  <key>CFBundleIconFile</key><string>Pearfin</string>
+  <key>LSMinimumSystemVersion</key><string>11.0</string>
+  <key>LSApplicationCategoryType</key><string>public.app-category.utilities</string>
+  <key>NSHighResolutionCapable</key><true/>
+  <key>NSRequiresAquaSystemAppearance</key><false/>
+  <key>NSHumanReadableCopyright</key><string>Uninstall apps and everything they leave behind. Based on Pearcleaner by alienator88.</string>
+  <!-- pearfin://uninstall?path=/Applications/Foo.app and pearfin://open?path=… -->
+  <key>CFBundleURLTypes</key>
+  <array>
+    <dict>
+      <key>CFBundleURLName</key><string>app.pearfin.mac</string>
+      <key>CFBundleURLSchemes</key><array><string>pearfin</string></array>
+    </dict>
+  </array>
+  <!-- Drop an app on the Dock icon, or Finder → Open With → Pearfin -->
+  <key>CFBundleDocumentTypes</key>
+  <array>
+    <dict>
+      <key>CFBundleTypeName</key><string>Application</string>
+      <key>CFBundleTypeRole</key><string>Viewer</string>
+      <key>LSHandlerRank</key><string>Alternate</string>
+      <key>LSItemContentTypes</key><array><string>com.apple.application-bundle</string></array>
+    </dict>
+  </array>
+  <key>NSAppleEventsUsageDescription</key><string>Pearfin asks apps to quit before uninstalling them, and asks Finder to empty the Trash when you choose Empty Trash.</string>
+  <key>NSDesktopFolderUsageDescription</key><string>Pearfin looks for files and Steam shortcuts that belong to the apps you uninstall.</string>
+  <key>NSDocumentsFolderUsageDescription</key><string>Pearfin looks for files that belong to the apps you uninstall, and File Search can look here.</string>
+  <key>NSDownloadsFolderUsageDescription</key><string>Pearfin saves exported file lists here, and File Search can look here.</string>
+</dict>
+</plist>

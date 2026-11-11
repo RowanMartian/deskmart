@@ -1,0 +1,1714 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="pearfin-token" content="__PEARFIN_TOKEN__">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#f5f5f7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#232325" media="(prefers-color-scheme: dark)">
+<title>Pearfin</title>
+<link rel="stylesheet" href="/fa/fontawesome.css">
+<link rel="icon" href="/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/icon-180.png">
+<style>
+/* Design tokens: identical to Dropfin so the two apps look like a family. */
+:root{
+  --bg:#ffffff; --sidebar:#f5f5f7; --panel:#ffffff; --hover:rgba(0,0,0,.045); --sb-active:rgba(0,0,0,.075);
+  --border:#e5e5ea; --border-strong:#d2d2d7; --text:#1d1d1f; --text2:#6e6e73; --text3:#a1a1a6;
+  --accent:#0a7aff; --accent-soft:rgba(10,122,255,.10); --sel:#0a7aff; --sel-inactive:#e3e3e8;
+  --danger:#e5372b; --danger-soft:rgba(229,55,43,.10); --ok:#1f9d48; --ok-soft:rgba(31,157,72,.12); --warn:#c77700; --warn-soft:rgba(230,140,0,.13);
+  --input:#ededf0; --input-hover:#e2e2e6; --track:#e5e5ea;
+  --folder:#58b0f7; --scrim:rgba(0,0,0,.2); --ql:#f5f5f7;
+  --sb-neutral:#7b8594; --sb-movies:#8b78c6; --sb-tv:#4e9a92; --sb-music:#c0808a; --sb-books:#b39252; --sb-photos:#6e9a64;
+  --brand:#6a5cff;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#1c1c1e; --sidebar:#232325; --panel:#232325; --hover:rgba(255,255,255,.055); --sb-active:rgba(255,255,255,.09);
+    --border:#333336; --border-strong:#48484b; --text:#f5f5f7; --text2:#a1a1a6; --text3:#6e6e73;
+    --accent:#0a84ff; --accent-soft:rgba(10,132,255,.16); --sel:#0a62d0; --sel-inactive:#3a3a3d;
+    --danger:#ff453a; --danger-soft:rgba(255,69,58,.15); --ok:#32d74b; --ok-soft:rgba(50,215,75,.14); --warn:#ffb340; --warn-soft:rgba(255,179,64,.14);
+    --input:#2f2f32; --input-hover:#3a3a3d; --track:#3a3a3d;
+    --folder:#4aa3ee; --scrim:rgba(0,0,0,.45); --ql:#161618;
+    --sb-neutral:#97a0ad; --sb-movies:#a594dc; --sb-tv:#6db7ae; --sb-music:#d59ca4; --sb-books:#cbab6c; --sb-photos:#8bb580;
+    --brand:#7d71ff;
+  }
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{font:13px/1.35 -apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue","Segoe UI",system-ui,sans-serif;color:var(--text);background:var(--bg);
+  -webkit-font-smoothing:antialiased;overflow:hidden;-webkit-user-select:none;user-select:none;cursor:default}
+[hidden]{display:none!important}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;margin:0;cursor:default}
+input,select,textarea{font:inherit;color:inherit}
+:focus{outline:none}
+:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+svg{flex:none;display:block}
+.fx{flex:none;line-height:1;text-align:center}
+.fi{width:1.3em}
+kbd{font:inherit}
+a{color:var(--accent);text-decoration:none}
+
+/* ---------- buttons & fields (Dropfin) ---------- */
+.btn{height:30px;padding:0 14px;border-radius:8px;background:var(--input);font-weight:500;white-space:nowrap;display:inline-flex;align-items:center;justify-content:center;gap:6px;flex:none}
+.btn:hover:not(:disabled){background:var(--input-hover)}
+.btn:disabled{opacity:.5}
+.btn.primary{background:var(--accent);color:#fff}
+.btn.primary:hover:not(:disabled){background:var(--accent);opacity:.9}
+.btn.danger{background:var(--danger);color:#fff}
+.btn.danger:hover:not(:disabled){background:var(--danger);opacity:.9}
+.btn.big{height:40px;font-size:14px;border-radius:10px}
+.btn.sm{height:26px;padding:0 10px;border-radius:7px;font-size:12px}
+.field{width:100%;height:34px;border:1px solid var(--border-strong);border-radius:8px;padding:0 11px;background:var(--bg);-webkit-user-select:text;user-select:text}
+.field:focus{border-color:var(--accent);outline:3px solid var(--accent-soft);outline-offset:0}
+.field::placeholder{color:var(--text3)}
+select.field{padding:0 8px;-webkit-appearance:none;appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--text2) 50%),linear-gradient(135deg,var(--text2) 50%,transparent 50%);background-position:calc(100% - 14px) 50%,calc(100% - 9px) 50%;background-size:5px 5px;background-repeat:no-repeat;padding-right:24px}
+.field.sm{height:28px;font-size:12.5px;border-radius:7px}
+label.lbl{display:block;font-size:12px;font-weight:500;color:var(--text2);margin:0 0 5px}
+.check{display:flex;gap:8px;align-items:center;color:var(--text2);font-size:12.5px}
+.check input{accent-color:var(--accent);margin:0}
+.link{color:var(--accent);cursor:pointer;font-size:12.5px}
+.link:hover{text-decoration:underline}
+.hint{font-size:12px;color:var(--text2);line-height:1.45}
+.err{color:var(--danger);font-size:12.5px;line-height:1.4}
+.spin{width:14px;height:14px;border-radius:50%;border:2px solid currentColor;border-right-color:transparent;animation:spin .7s linear infinite;flex:none;display:inline-block}
+@keyframes spin{to{transform:rotate(360deg)}}
+input[type=checkbox].cb{width:15px;height:15px;accent-color:var(--accent);margin:0;flex:none}
+
+/* ---------- app shell (Dropfin) ---------- */
+.app{display:grid;grid-template-columns:236px minmax(0,1fr);height:100%}
+.sidebar{background:var(--sidebar);border-right:1px solid var(--border);display:flex;flex-direction:column;min-height:0;padding:14px 10px 10px}
+.sb-head{display:flex;align-items:center;gap:10px;padding:2px 8px 10px}
+.sb-head img{width:24px;height:24px}
+.sb-title{font-weight:650;font-size:13px}
+#sb-nav{flex:1;overflow:auto;padding-bottom:8px}
+.sb-section{font-size:11px;font-weight:600;color:var(--text3);padding:14px 10px 4px}
+.sb-item{display:flex;align-items:center;gap:9px;width:100%;height:30px;padding:0 10px;border-radius:8px;text-align:left}
+.sb-item .fx{color:var(--sb-neutral);width:18px}
+.sb-item.t-purple .fx{color:var(--sb-movies)}
+.sb-item.t-teal .fx{color:var(--sb-tv)}
+.sb-item.t-rose .fx{color:var(--sb-music)}
+.sb-item.t-amber .fx{color:var(--sb-books)}
+.sb-item.t-green .fx{color:var(--sb-photos)}
+.sb-item span{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sb-item .cnt{flex:none;font-size:11px;color:var(--text3);font-variant-numeric:tabular-nums}
+.sb-item:hover{background:var(--hover)}
+.sb-item.active{background:var(--sb-active)}
+.sb-foot{border-top:1px solid var(--border);padding:12px 6px 0;display:grid;gap:12px}
+.storage .lbl2{font-size:11px;color:var(--text2);margin-bottom:6px;display:flex;justify-content:space-between;gap:8px}
+.bar{height:5px;border-radius:3px;background:var(--track);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--text2);border-radius:3px;transition:width .25s linear}
+.sb-conn{display:flex;align-items:center;gap:8px;height:32px;padding:0 8px;border-radius:8px;width:100%;text-align:left}
+.sb-conn:hover{background:var(--hover)}
+.sb-conn .dot{width:8px;height:8px;border-radius:50%;background:var(--ok);flex:none}
+.sb-conn .dot.off{background:var(--warn)}
+.sb-conn .dot.unk{background:var(--text3)}
+.upd-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);flex:none;opacity:.85}
+.sb-conn span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:500}
+.sb-conn .fx{color:var(--text2)}
+
+.main{display:grid;grid-template-rows:52px minmax(0,1fr) 30px;min-width:0;min-height:0}
+.toolbar{display:flex;align-items:center;gap:4px;padding:0 12px;border-bottom:1px solid var(--border);min-width:0}
+.tb{height:30px;min-width:32px;padding:0 7px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;gap:6px;color:var(--text2);flex:none}
+.tb:hover:not(:disabled){background:var(--hover);color:var(--text)}
+.tb:disabled{opacity:.35}
+.tb.on{background:var(--sb-active);color:var(--text)}
+.tb.label{padding:0 10px;font-weight:500}
+.tb-title{font-size:14px;font-weight:650;margin:0 0 0 6px;padding:4px 8px;border-radius:7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;max-width:40%}
+.tb-spacer{flex:1;min-width:8px}
+.tb-sep{width:1px;height:18px;background:var(--border);margin:0 5px;flex:none}
+.seg{display:flex;background:var(--input);border-radius:8px;padding:2px;gap:2px;flex:none;margin-right:4px}
+.seg button{height:26px;min-width:32px;padding:0 8px;border-radius:6px;display:grid;place-items:center;color:var(--text2);white-space:nowrap}
+.seg button.on{background:var(--panel);color:var(--text);outline:1px solid var(--border-strong);outline-offset:-1px}
+.seg.text button{padding:0 12px;font-weight:500;font-size:12.5px}
+.search{display:flex;align-items:center;gap:6px;height:30px;background:var(--input);border-radius:8px;padding:0 9px;color:var(--text2);width:190px;margin-left:6px;flex:none}
+.search input{border:0;background:none;flex:1;min-width:0;outline:none;-webkit-user-select:text;user-select:text}
+.search input::placeholder{color:var(--text3)}
+
+.content{position:relative;min-height:0;display:flex;flex-direction:column}
+.files{flex:1;overflow:auto;padding:0 8px 16px;scroll-padding-top:34px}
+.files:focus,.files:focus-visible{outline:none}
+.list-head{position:sticky;top:0;z-index:2;background:var(--bg);display:grid;grid-template-columns:var(--cols);border-bottom:1px solid var(--border);margin:0 -8px 4px;padding:0 8px}
+.list-head button,.list-head div{text-align:left;padding:0 10px;font-size:11.5px;font-weight:500;color:var(--text2);display:flex;align-items:center;gap:4px;border-left:1px solid var(--border);margin:5px 0;height:18px;white-space:nowrap;overflow:hidden}
+.list-head>:first-child{border-left:0}
+.list-head .r{justify-content:flex-end}
+.list-head button.sorted{color:var(--text);font-weight:600}
+.list-head button:hover{color:var(--text)}
+.row{display:grid;grid-template-columns:var(--cols);min-height:28px;align-items:center;border-radius:7px}
+.row>div{padding:0 10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row:hover{background:var(--hover)}
+.row.tall{min-height:40px}
+.c-name{display:flex;align-items:center;gap:8px;min-width:0}
+.c-name .nm{overflow:hidden;text-overflow:ellipsis;min-width:0}
+.c-name .two{display:flex;flex-direction:column;min-width:0;line-height:1.25}
+.c-name .two small{color:var(--text2);font-size:11.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.c-dim{color:var(--text2)}
+.c-r{text-align:right;font-variant-numeric:tabular-nums}
+.row.sel{background:var(--sel);color:#fff}
+.row.sel .c-dim,.row.sel small{color:rgba(255,255,255,.82)!important}
+.files:not(:focus-within) .row.sel{background:var(--sel-inactive);color:var(--text)}
+.files:not(:focus-within) .row.sel .c-dim,.files:not(:focus-within) .row.sel small{color:var(--text2)!important}
+.row.off{opacity:.55}
+.grp{font-size:11px;font-weight:600;color:var(--text3);padding:14px 10px 4px;display:flex;align-items:center;gap:8px}
+.grp .r{margin-left:auto;font-weight:500}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:4px;padding-top:6px}
+.tile{display:flex;flex-direction:column;align-items:center;padding:8px 4px 6px;border-radius:10px;gap:5px;min-width:0;position:relative}
+.tile:hover{background:var(--hover)}
+.tile .ic{width:64px;height:64px;display:grid;place-items:center}
+.tile .ic img{width:64px;height:64px}
+.tile .nm{font-size:12px;text-align:center;line-height:1.3;padding:1px 6px;border-radius:5px;max-width:100%;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;word-break:break-word}
+.tile .sub{font-size:11px;color:var(--text3);margin-top:-3px}
+.tile.sel{background:var(--sel-inactive)}
+.tile.sel .nm{background:var(--sel);color:#fff}
+.tile .bdg{position:absolute;top:6px;right:12px}
+.empty{min-height:calc(100% - 40px);display:grid;place-items:center;text-align:center;color:var(--text2);padding:24px}
+.empty .box{display:grid;gap:8px;justify-items:center;padding:30px 40px;border:1.5px dashed var(--border-strong);border-radius:18px;max-width:520px}
+.empty .box b{color:var(--text);font-size:14px;font-weight:600}
+.empty .box .big-ic{font-size:30px;color:var(--text3);margin-bottom:4px}
+.loading{display:grid;place-items:center;height:60%;color:var(--text3);gap:10px;align-content:center;text-align:center}
+.content.drop-here::after{content:"";position:absolute;inset:6px;border:2px solid var(--accent);border-radius:12px;background:var(--accent-soft);pointer-events:none;z-index:5}
+
+.statusbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 12px;border-top:1px solid var(--border);font-size:11.5px;color:var(--text2);min-width:0}
+.statusbar>div{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.status-right{flex:none}
+
+/* app icons, badges */
+.aic{width:20px;height:20px;flex:none;display:grid;place-items:center}
+.aic img{width:20px;height:20px;display:block}
+.aic.lg{width:28px;height:28px}.aic.lg img{width:28px;height:28px}
+.aic .fx{color:var(--text3)}
+.bdg{display:inline-flex;align-items:center;gap:4px;height:18px;padding:0 6px;border-radius:5px;font-size:10.5px;font-weight:600;background:var(--input);color:var(--text2);white-space:nowrap;flex:none}
+.bdg.blue{background:var(--accent-soft);color:var(--accent)}
+.bdg.green{background:var(--ok-soft);color:var(--ok)}
+.bdg.orange{background:var(--warn-soft);color:var(--warn)}
+.bdg.red{background:var(--danger-soft);color:var(--danger)}
+.bdg.purple{background:rgba(139,120,198,.16);color:var(--sb-movies)}
+.row.sel .bdg{background:rgba(255,255,255,.2);color:#fff}
+.files:not(:focus-within) .row.sel .bdg{background:var(--input);color:var(--text2)}
+.bdgs{display:flex;gap:4px;flex:none}
+
+/* detail header */
+.detail{padding:18px 8px 0}
+.hcard{display:flex;gap:16px;align-items:center;padding:4px 10px 18px;border-bottom:1px solid var(--border)}
+.hcard .big{width:72px;height:72px;flex:none;display:grid;place-items:center}
+.hcard .big img{width:72px;height:72px}
+.hcard .big .fx{font-size:46px;color:var(--text3)}
+.hcard .meta{flex:1;min-width:0}
+.hcard h1{font-size:20px;margin:0 0 3px;font-weight:650;letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hcard .sub{color:var(--text2);font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;-webkit-user-select:text;user-select:text}
+.hcard .bdgs{margin-top:7px;flex-wrap:wrap}
+.hcard .acts{display:flex;gap:8px;align-items:center;flex:none}
+.banner{display:flex;gap:10px;align-items:center;margin:12px 10px 0;padding:10px 12px;border-radius:10px;background:var(--warn-soft);color:var(--text);font-size:12.5px;line-height:1.4}
+.banner .fx{color:var(--warn);font-size:15px}
+.banner.info{background:var(--accent-soft)}
+.banner.info .fx{color:var(--accent)}
+.banner .grow{flex:1;min-width:0}
+.subbar{display:flex;align-items:center;gap:10px;padding:10px 10px 6px;color:var(--text2);font-size:12px}
+.subbar .grow{flex:1}
+
+/* bottom action bar */
+.actionbar{display:flex;align-items:center;gap:10px;padding:10px 16px;border-top:1px solid var(--border);background:var(--bg);flex:none}
+.actionbar .info{flex:1;min-width:0;color:var(--text2);font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.actionbar .info b{color:var(--text);font-weight:600}
+
+/* chips (Developer environments, filters) */
+.chips{display:flex;flex-wrap:wrap;gap:6px;padding:12px 10px 6px}
+.chip{display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 11px;border-radius:999px;background:var(--input);color:var(--text);font-weight:500;font-size:12px;white-space:nowrap}
+.chip:hover{background:var(--input-hover)}
+.chip.on{background:var(--accent);color:#fff}
+.chip small{opacity:.75;font-weight:500}
+
+/* panels / cards */
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;padding:16px 10px}
+.card{border:1px solid var(--border);border-radius:14px;padding:16px;display:grid;gap:8px;align-content:start;background:var(--panel)}
+.card h4{margin:0;font-size:13.5px;font-weight:650;display:flex;align-items:center;gap:8px}
+.card h4 .fx{color:var(--accent);width:18px}
+.card p{margin:0;color:var(--text2);font-size:12.5px;line-height:1.45}
+.card .btn{justify-self:start;margin-top:4px}
+.term{font:11.5px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;background:var(--ql);border:1px solid var(--border);border-radius:10px;padding:10px 12px;margin:0 10px 12px;max-height:260px;overflow:auto;white-space:pre-wrap;word-break:break-all;-webkit-user-select:text;user-select:text;color:var(--text)}
+.term:empty{display:none}
+
+/* file search filter builder */
+.fbuilder{padding:12px 10px 4px;display:grid;gap:8px;border-bottom:1px solid var(--border)}
+.frow{display:flex;gap:6px;align-items:center}
+.frow .field{width:auto}
+.frow .grow{flex:1;min-width:80px}
+.frow .x{width:26px;height:26px;border-radius:7px;display:grid;place-items:center;color:var(--text2);flex:none}
+.frow .x:hover{background:var(--hover);color:var(--text)}
+.fopts{display:flex;gap:14px;align-items:center;flex-wrap:wrap;padding:2px 0 8px}
+
+/* ---------- menus, dialogs, toasts (Dropfin) ---------- */
+.menu{position:fixed;z-index:70;min-width:210px;max-width:320px;background:var(--panel);border:1px solid var(--border-strong);border-radius:11px;padding:5px;display:grid}
+.mi{display:flex;justify-content:space-between;align-items:center;gap:24px;height:26px;padding:0 10px;border-radius:6px;text-align:left;white-space:nowrap}
+.mi span{overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center;gap:8px}
+.mi:hover:not(:disabled),.mi.kb{background:var(--accent);color:#fff}
+.mi:hover kbd,.mi.kb kbd{color:rgba(255,255,255,.8)}
+.mi:disabled{color:var(--text3)}
+.mi.danger{color:var(--danger)}
+.mi.danger:hover{background:var(--danger);color:#fff}
+.mi kbd{color:var(--text3);font-size:12px}
+.mi .ck{width:12px;display:inline-block}
+.mhead{font-size:11px;font-weight:600;color:var(--text3);padding:6px 10px 3px}
+.sep{height:1px;background:var(--border);margin:4px 8px}
+.scrim{position:fixed;inset:0;background:var(--scrim);display:grid;place-items:center;z-index:60;padding:16px}
+.dialog{background:var(--panel);border:1px solid var(--border-strong);border-radius:16px;width:min(400px,100%);padding:22px;max-height:calc(100vh - 32px);overflow:auto}
+.dialog.wide{width:min(560px,100%)}
+.dialog.xwide{width:min(720px,100%)}
+.dialog h3{margin:0 0 6px;font-size:14px;font-weight:650}
+.dialog p{margin:0 0 14px;color:var(--text2);line-height:1.45}
+.dialog .field{margin-bottom:14px}
+.dialog form{display:block}
+.dlg-btns{display:flex;justify-content:flex-end;gap:8px;margin-top:6px}
+.dlg-btns .left{margin-right:auto}
+.dlg-icon{width:44px;height:44px;margin-bottom:12px;display:grid;place-items:center}
+.dlg-icon img{width:44px;height:44px}
+.kv{display:grid;grid-template-columns:110px 1fr;gap:7px 12px;font-size:12.5px;margin:6px 0 18px}
+.kv dt{color:var(--text2);text-align:right}
+.kv dd{margin:0;word-break:break-all;-webkit-user-select:text;user-select:text}
+.mono{font:12px ui-monospace,SFMono-Regular,Menlo,monospace;background:var(--input);border-radius:8px;padding:8px 10px;word-break:break-all;-webkit-user-select:text;user-select:text;margin:0 0 14px}
+.toast{position:fixed;left:50%;bottom:46px;transform:translateX(-50%);background:var(--text);color:var(--bg);padding:9px 16px;border-radius:999px;z-index:80;font-weight:500;max-width:calc(100vw - 32px);text-align:center;display:flex;gap:12px;align-items:center}
+.toast.bad{background:var(--danger);color:#fff}
+.toast button{font-weight:650;text-decoration:underline}
+.dlist{border:1px solid var(--border);border-radius:10px;max-height:300px;overflow:auto;margin:0 0 14px;padding:4px}
+.dlist .row{grid-template-columns:auto minmax(0,1fr) auto;gap:0}
+.notes{font-size:12.5px;line-height:1.5;color:var(--text2);max-height:240px;overflow:auto;border:1px solid var(--border);border-radius:10px;padding:10px 12px;margin:0 0 14px;-webkit-user-select:text;user-select:text}
+.notes img{max-width:100%}
+
+/* settings */
+.set-tabs{margin:2px 0 16px}
+.set-row{display:flex;gap:14px;align-items:flex-start;justify-content:space-between;padding:11px 0;border-top:1px solid var(--border)}
+.set-row:first-of-type{border-top:0}
+.set-row .t{flex:1;min-width:0}
+.set-row .t>b{display:block;font-weight:600;margin-bottom:2px}
+.set-row code{font:11.5px ui-monospace,SFMono-Regular,Menlo,monospace;background:var(--input);border-radius:5px;padding:1px 5px}
+.set-row .t small{display:block;color:var(--text2);font-size:12px;line-height:1.45}
+.toggle{position:relative;width:34px;height:20px;flex:none;margin-top:2px}
+.toggle input{opacity:0;width:0;height:0;position:absolute}
+.toggle i{position:absolute;inset:0;background:var(--track);border-radius:999px;transition:background .15s}
+.toggle i::after{content:"";position:absolute;left:2px;top:2px;width:16px;height:16px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.25);transition:transform .15s}
+.toggle input:checked+i{background:var(--accent)}
+.toggle input:checked+i::after{transform:translateX(14px)}
+.levels{display:grid;gap:8px;margin:4px 0 6px}
+.level{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--border);border-radius:12px;padding:10px 12px}
+.level.on{border-color:var(--accent);background:var(--accent-soft)}
+.level input{margin:2px 0 0;accent-color:var(--accent)}
+.level b{display:block;margin-bottom:2px}
+.level small{color:var(--text2);font-size:12px;line-height:1.45}
+.plist{border:1px solid var(--border);border-radius:10px;padding:4px;margin:6px 0 8px;max-height:150px;overflow:auto}
+.plist .it{display:flex;align-items:center;gap:8px;height:28px;padding:0 6px 0 10px;border-radius:7px}
+.plist .it:hover{background:var(--hover)}
+.plist .it span{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12.5px}
+.plist .none{color:var(--text3);font-size:12px;padding:6px 10px}
+.icon-btn{width:26px;height:26px;border-radius:7px;display:grid;place-items:center;color:var(--text2);flex:none}
+.icon-btn:hover{background:var(--hover);color:var(--text)}
+.addrow{display:flex;gap:6px}
+.addrow .field{margin:0;height:30px}
+
+/* console (bottom-right panel like Dropfin's transfers) */
+.console{position:fixed;right:16px;bottom:44px;width:min(520px,calc(100vw - 32px));background:var(--panel);border:1px solid var(--border-strong);border-radius:16px;z-index:50;display:flex;flex-direction:column;max-height:min(55vh,460px)}
+.con-head{display:flex;align-items:center;gap:10px;padding:12px 10px 10px 14px;border-bottom:1px solid var(--border)}
+.con-head .t{flex:1;font-weight:650}
+.con-body{overflow:auto;padding:8px 14px 12px;font:11.5px/1.55 ui-monospace,SFMono-Regular,Menlo,monospace;white-space:pre-wrap;word-break:break-all;-webkit-user-select:text;user-select:text}
+.con-body .src{color:var(--text3)}
+
+/* standalone app window */
+.app-mode .sidebar{padding-top:0}
+.app-mode .sb-head{height:46px;padding:0}
+.app-mode .sb-head>*{display:none}
+</style>
+</head>
+<body>
+
+<div id="app" class="app">
+  <aside class="sidebar" id="sidebar">
+    <div class="sb-head"><img src="/icon.svg" alt=""><div class="sb-title">Pearfin</div></div>
+    <nav id="sb-nav"></nav>
+    <div class="sb-foot">
+      <div class="storage" id="storage"></div>
+      <button class="sb-conn" id="sb-conn" title="Pearfin options"><i class="dot unk" id="perm-dot"></i><span id="perm-name">Pearfin</span><i class="upd-dot" id="upd-dot" hidden title="Update available"></i><i class="fa-solid fa-ellipsis fx" style="font-size:14px" aria-hidden="true"></i></button>
+    </div>
+  </aside>
+  <main class="main">
+    <header class="toolbar" id="toolbar"></header>
+    <div class="content" id="content"></div>
+    <footer class="statusbar"><div id="status-left"></div><div class="status-right" id="status-right"></div></footer>
+  </main>
+</div>
+
+<div class="console" id="console" hidden>
+  <div class="con-head"><div class="t">Console</div><button class="icon-btn" id="con-clear" title="Clear"></button><button class="icon-btn" id="con-close" title="Close"></button></div>
+  <div class="con-body" id="con-body"></div>
+</div>
+<div id="menu" class="menu" hidden></div>
+<div id="toast" class="toast" hidden></div>
+
+<script>
+'use strict';
+const TOKEN = document.querySelector('meta[name="pearfin-token"]').content;
+const $ = (s, el = document) => el.querySelector(s);
+const $$ = (s, el = document) => [...el.querySelectorAll(s)];
+const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const IS_APP = !!window.__PEARFIN_APP__;
+if (IS_APP) document.documentElement.classList.add('app-mode');
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+const LS = {
+  get(k, d) { try { const v = localStorage.getItem('pearfin.' + k); return v == null ? d : JSON.parse(v); } catch { return d; } },
+  set(k, v) { try { localStorage.setItem('pearfin.' + k, JSON.stringify(v)); } catch {} },
+};
+
+/* ------------------------------------------------------------ icons (Font Awesome Free, bundled) */
+const fa = (name, px, color) => `<i class="fa-solid fa-${name} fx" style="font-size:${px}px${color ? ';color:' + color : ''}" aria-hidden="true"></i>`;
+const I = {
+  back: fa('chevron-left', 14), fwd: fa('chevron-right', 14), list: fa('list', 13), grid: fa('table-cells-large', 13), search: fa('magnifying-glass', 12),
+  sort: fa('arrow-down-wide-short', 13), refresh: fa('arrows-rotate', 13), x: fa('xmark', 13), dots: fa('ellipsis', 14), trash: fa('trash-can', 13),
+  apps: fa('table-cells', 13), orphans: fa('file-circle-question', 14), dev: fa('hammer', 13), find: fa('magnifying-glass', 13), brew: fa('mug-hot', 13),
+  lipo: fa('scissors', 13), pkg: fa('box-open', 13), plug: fa('puzzle-piece', 13), svc: fa('gears', 13), upd: fa('circle-down', 13),
+  app: fa('cube', 15), folder: fa('folder', 14), file: fa('file', 13), lock: fa('lock', 10), link: fa('link', 10), warn: fa('triangle-exclamation', 15), info: fa('circle-info', 15),
+  play: fa('play', 11), stop: fa('stop', 11), console: fa('terminal', 12), shield: fa('shield-halved', 15), clock: fa('clock-rotate-left', 13), plus: fa('plus', 12),
+  check: fa('check', 11), gear: fa('gear', 13), filter: fa('filter', 12),
+};
+const PAGES = [
+  { id: 'apps', title: 'Apps', icon: I.apps, tint: 'purple', group: 'Clean' },
+  { id: 'orphans', title: 'Orphans', icon: I.orphans, tint: 'amber', group: 'Clean' },
+  { id: 'development', title: 'Developer', icon: I.dev, tint: 'teal', group: 'Clean' },
+  { id: 'fileSearch', title: 'File Search', icon: I.find, tint: '', group: 'Tools' },
+  { id: 'lipo', title: 'Lipo', icon: I.lipo, tint: 'green', group: 'Tools' },
+  { id: 'updater', title: 'Updater', icon: I.upd, tint: 'teal', group: 'Tools' },
+  { id: 'homebrew', title: 'Homebrew', icon: I.brew, tint: 'rose', group: 'Manage' },
+  { id: 'packages', title: 'Packages', icon: I.pkg, tint: 'amber', group: 'Manage' },
+  { id: 'plugins', title: 'Plugins', icon: I.plug, tint: 'purple', group: 'Manage' },
+  { id: 'services', title: 'Services', icon: I.svc, tint: '', group: 'Manage' },
+];
+const iconUrl = (p, px) => `/api/icon?t=${TOKEN}&size=${px}&path=${encodeURIComponent(p)}`;
+/** Finder icon for a path, falling back to a Font Awesome glyph if macOS can't draw one. */
+function pic(p, px, fallback, cls = 'aic') {
+  const fb = fallback || I.file;
+  return `<span class="${cls}" data-fb="${esc(fb)}"><img src="${iconUrl(p, px * 2)}" alt="" loading="lazy" draggable="false"></span>`;
+}
+document.addEventListener('error', (e) => {
+  const img = e.target;
+  if (img.tagName === 'IMG' && img.parentElement && img.parentElement.dataset.fb != null) img.parentElement.innerHTML = img.parentElement.dataset.fb;
+}, true);
+
+/* ------------------------------------------------------------ formatting (Dropfin) */
+function fmtSize(b) {
+  if (b == null) return '--';
+  if (b < 1000) return b + ' bytes';
+  const u = ['KB', 'MB', 'GB', 'TB', 'PB']; let i = -1;
+  do { b /= 1000; i++; } while (b >= 1000 && i < u.length - 1);
+  return (b >= 100 ? Math.round(b) : b >= 10 ? b.toFixed(1) : b.toFixed(2)).toString().replace(/\.0+$|(\.\d*?)0+$/, '$1') + ' ' + u[i];
+}
+const timeFmt = new Intl.DateTimeFormat(undefined, { hour: 'numeric', minute: '2-digit' });
+const dateFmt = new Intl.DateTimeFormat(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
+function fmtDate(sec) {
+  if (!sec) return '--';
+  const d = new Date(sec * 1000), now = new Date();
+  const day = (x) => new Date(x.getFullYear(), x.getMonth(), x.getDate()).getTime();
+  const diff = Math.round((day(now) - day(d)) / 86400000);
+  if (diff === 0) return 'Today at ' + timeFmt.format(d);
+  if (diff === 1) return 'Yesterday at ' + timeFmt.format(d);
+  return dateFmt.format(d);
+}
+const plural = (n, w) => `${n.toLocaleString()} ${w}${n === 1 ? '' : 's'}`;
+const baseOf = (p) => p.slice(p.lastIndexOf('/') + 1) || '/';
+const parentOf = (p) => { const i = p.lastIndexOf('/'); return i <= 0 ? '/' : p.slice(0, i); };
+let HOME = '';
+const tild = (p) => (HOME && (p === HOME || p.startsWith(HOME + '/')) ? '~' + p.slice(HOME.length) : p);
+const appName = (p) => baseOf(p).replace(/\.app$/, '');
+
+/* ------------------------------------------------------------ api */
+class HttpError extends Error { constructor(m, status, data) { super(m); this.status = status; this.data = data || {}; } }
+function qs(p) { const u = new URLSearchParams(); for (const [k, v] of Object.entries(p || {})) if (v != null) u.append(k, v); return u.toString(); }
+async function api(method, p, params, body) {
+  let r;
+  try {
+    r = await fetch('/api/' + p + (params ? '?' + qs(params) : ''), {
+      method, headers: { 'X-Pearfin-Token': TOKEN, ...(method === 'POST' ? { 'Content-Type': 'application/json' } : {}) },
+      body: method === 'POST' ? JSON.stringify(body || {}) : undefined,
+    });
+  } catch { throw new HttpError("Pearfin isn't running anymore. Open the app again.", 0, { reason: 'gone' }); }
+  let data = null;
+  try { data = await r.json(); } catch {}
+  if (!r.ok) {
+    if (data && data.reason === 'token') location.reload();
+    throw new HttpError((data && data.error) || r.statusText || 'Something went wrong', r.status, data);
+  }
+  return data;
+}
+/** Polls a background task until it finishes. */
+async function follow(taskId, { onItems, onLines, onProgress } = {}) {
+  let items = 0, lines = 0;
+  for (;;) {
+    const t = await api('GET', 'task', { id: taskId, items, lines });
+    items = t.itemCount; lines = t.lineCount;
+    if (t.items.length && onItems) onItems(t.items);
+    if (t.lines.length && onLines) onLines(t.lines);
+    if (onProgress) onProgress(t.progress, t);
+    if (t.status !== 'running') { if (t.status === 'error') throw new HttpError(t.error || 'Failed', 500); return t; }
+    await sleep(350);
+  }
+}
+
+/* ------------------------------------------------------------ state */
+const S = {
+  page: LS.get('page', 'apps'), st: null, settings: null, view: LS.get('view', 'list'), sort: LS.get('sort', { key: 'name', dir: 1 }),
+  filter: '', apps: null, appsLoading: false, sel: new Set(), anchor: null, detail: null, nativeArch: 'arm', update: null,
+  cache: {}, task: null,
+};
+const setStatus = (l, r) => { $('#status-left').textContent = l || ''; $('#status-right').textContent = r || ''; };
+
+/* ------------------------------------------------------------ toast, menu, modal (Dropfin) */
+let toastTimer;
+function toast(msg, bad, action) {
+  const t = $('#toast'); t.innerHTML = `<span>${esc(msg)}</span>${action ? `<button>${esc(action.label)}</button>` : ''}`; t.className = 'toast' + (bad ? ' bad' : ''); t.hidden = false;
+  if (action) t.querySelector('button').onclick = () => { t.hidden = true; action.run(); };
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => { t.hidden = true; }, bad ? 5600 : action ? 7000 : 2800);
+}
+const showError = (e) => toast(e && e.message ? e.message : String(e), true);
+
+const menuEl = $('#menu');
+let menuItems = [];
+function showMenu(items, x, y, anchorEl) {
+  items = items.filter(Boolean).filter((it, i, a) => !(it === '-' && (i === 0 || a[i - 1] === '-' || i === a.length - 1)));
+  if (items[items.length - 1] === '-') items.pop();
+  menuItems = items;
+  menuEl.innerHTML = items.map((it, i) => it === '-' ? '<div class="sep"></div>' : it.head ? `<div class="mhead">${esc(it.head)}</div>` :
+    `<button class="mi${it.danger ? ' danger' : ''}" data-i="${i}" ${it.disabled ? 'disabled' : ''}><span>${it.checked != null ? `<i class="ck">${it.checked ? '✓' : ''}</i>` : ''}${esc(it.label)}</span>${it.kbd ? `<kbd>${esc(it.kbd)}</kbd>` : ''}</button>`).join('');
+  menuEl.hidden = false;
+  const r = menuEl.getBoundingClientRect();
+  if (anchorEl) { const a = anchorEl.getBoundingClientRect(); x = Math.min(a.left, innerWidth - r.width - 8); y = a.bottom + 4; if (y + r.height > innerHeight - 8) y = a.top - r.height - 4; }
+  menuEl.style.left = Math.max(8, Math.min(x, innerWidth - r.width - 8)) + 'px';
+  menuEl.style.top = Math.max(8, Math.min(y, innerHeight - r.height - 8)) + 'px';
+}
+function hideMenu() { menuEl.hidden = true; }
+menuEl.addEventListener('click', (e) => { const b = e.target.closest('.mi'); if (!b || b.disabled) return; hideMenu(); const it = menuItems[+b.dataset.i]; it && it.action && it.action(); });
+document.addEventListener('mousedown', (e) => { if (!menuEl.hidden && !menuEl.contains(e.target)) hideMenu(); }, true);
+window.addEventListener('blur', hideMenu);
+window.addEventListener('resize', hideMenu);
+
+let modalOpen = 0;
+function modal({ title, message, html, input, inputValue = '', placeholder = '', check, checked = false, buttons, wide, icon, onOpen }) {
+  return new Promise((resolve) => {
+    modalOpen++; hideMenu();
+    const scrim = document.createElement('div');
+    scrim.className = 'scrim';
+    buttons = buttons || [{ label: 'Cancel', value: null }, { label: 'OK', value: true, primary: true }];
+    scrim.innerHTML = `<form class="dialog${wide === 'x' ? ' xwide' : wide ? ' wide' : ''}" novalidate>
+      ${icon ? `<div class="dlg-icon">${icon}</div>` : ''}
+      ${title ? `<h3>${esc(title)}</h3>` : ''}
+      ${message ? `<p>${esc(message)}</p>` : ''}
+      ${html || ''}
+      ${input ? `<input class="field" name="v" autocomplete="off" spellcheck="false" placeholder="${esc(placeholder)}" value="${esc(inputValue)}">` : ''}
+      ${check ? `<label class="check" style="margin:-2px 0 16px"><input type="checkbox" name="c" ${checked ? 'checked' : ''}> ${esc(check)}</label>` : ''}
+      <div class="dlg-btns">${buttons.map((b, i) => `<button type="${b.primary ? 'submit' : 'button'}" class="btn${b.primary ? ' primary' : ''}${b.danger ? ' danger' : ''}${b.left ? ' left' : ''}" data-i="${i}">${esc(b.label)}</button>`).join('')}</div>
+    </form>`;
+    document.body.appendChild(scrim);
+    const form = scrim.firstElementChild;
+    const inp = form.querySelector('input[name=v]');
+    const finish = (val) => {
+      if (!scrim.isConnected) return;
+      scrim.remove(); modalOpen--; document.removeEventListener('keydown', onKey, true);
+      resolve(val === null || val === undefined ? null : { value: val, input: inp ? inp.value : undefined, checked: form.c ? form.c.checked : undefined, form });
+    };
+    const primary = buttons.find((b) => b.primary);
+    form.addEventListener('submit', (e) => { e.preventDefault(); if (primary) { if (primary.validate && !primary.validate(form)) return; finish(primary.value); } });
+    form.addEventListener('click', (e) => { const b = e.target.closest('.dlg-btns button'); if (b && b.type === 'button') finish(buttons[+b.dataset.i].value); });
+    scrim.addEventListener('mousedown', (e) => { if (e.target === scrim) finish(null); });
+    const onKey = (e) => { if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); finish(null); } };
+    document.addEventListener('keydown', onKey, true);
+    if (onOpen) onOpen(form, finish);
+    requestAnimationFrame(() => { if (inp) { inp.focus(); inp.select(); } else { const f = form.querySelector('.btn.primary'); f && f.focus(); } });
+  });
+}
+const confirmDlg = (title, message, label = 'OK', danger = false, icon) =>
+  modal({ title, message, icon, buttons: [{ label: 'Cancel', value: null }, { label, value: true, primary: true, danger }] });
+const okDlg = (title, message, icon) => modal({ title, message, icon, buttons: [{ label: 'OK', value: true, primary: true }] });
+
+/* ------------------------------------------------------------ shell: sidebar, toolbar */
+function visiblePages() { const hidden = (S.settings && S.settings.hiddenPages) || []; return PAGES.filter((p) => !hidden.includes(p.id)); }
+function renderSidebar() {
+  let h = '', group = '';
+  for (const p of visiblePages()) {
+    if (p.group !== group) { group = p.group; h += `<div class="sb-section">${esc(group)}</div>`; }
+    const cnt = p.id === 'apps' && S.apps ? S.apps.length : p.id === 'updater' && S.cache.updates ? (S.cache.updates.length || '') : '';
+    h += `<button class="sb-item t-${p.tint} ${S.page === p.id ? 'active' : ''}" data-page="${p.id}">${p.icon}<span>${esc(p.title)}</span>${cnt !== '' ? `<i class="cnt">${cnt}</i>` : ''}</button>`;
+  }
+  $('#sb-nav').innerHTML = h;
+  renderStorage();
+}
+function renderStorage() {
+  const st = S.st; const el = $('#storage');
+  if (!st || !st.total) { el.innerHTML = ''; return; }
+  const used = 1 - st.free / st.total;
+  el.innerHTML = `<div class="lbl2"><span>${fmtSize(st.free)} available</span><span>${fmtSize(st.total)}</span></div><div class="bar"><i style="width:${(used * 100).toFixed(1)}%;${used > 0.92 ? 'background:var(--danger)' : ''}"></i></div>`;
+}
+function renderPermDot() {
+  const st = S.st; if (!st) return;
+  const dot = $('#perm-dot'), name = $('#perm-name');
+  const os = st.macosName ? `macOS ${st.macosName}` : st.macos ? `macOS ${st.macos}` : 'Pearfin';
+  dot.className = 'dot' + (st.fullDiskAccess === true ? '' : st.fullDiskAccess === false ? ' off' : ' unk');
+  name.textContent = os;
+  $('#sb-conn').title = st.fullDiskAccess === false ? 'Full Disk Access is off — click for options' : 'Pearfin options';
+}
+$('#sb-nav').addEventListener('click', (e) => { const b = e.target.closest('.sb-item'); if (b) go(b.dataset.page); });
+$('#sb-conn').onclick = (e) => {
+  showMenu([
+    { label: 'Settings…', kbd: '⌘,', action: () => settingsDlg() },
+    { label: S.st && S.st.fullDiskAccess === false ? 'Permissions… (Full Disk Access is off)' : 'Permissions…', action: () => permissionsDlg() },
+    { label: 'Restore Deleted Files…', action: () => historyDlg() },
+    { label: 'Show Console', action: () => toggleConsole(true) },
+    '-',
+    S.update && S.update.available ? { label: 'Update Available…', action: () => updateDlg() } : { label: 'Check for Updates…', action: () => checkSelfUpdate(true) },
+    { label: 'About Pearfin', action: () => settingsDlg('about') },
+    IS_APP ? '-' : null,
+    IS_APP ? { label: 'Quit Pearfin', action: () => api('POST', 'quit') } : null,
+  ], 0, 0, e.currentTarget);
+};
+
+/** Builds the toolbar: [back] title … actions [search]. */
+function toolbar({ back, title, actions = '', search = true, placeholder = 'Search' }) {
+  $('#toolbar').innerHTML = `
+    ${back ? `<button class="tb" id="tb-back" title="Back">${I.back}</button>` : ''}
+    <div class="tb-title" id="tb-title">${esc(title)}</div>
+    <div class="tb-spacer"></div>
+    ${actions}
+    ${search ? `<label class="search"><span>${I.search}</span><input id="search" type="search" placeholder="${esc(placeholder)}" autocomplete="off" spellcheck="false" value="${esc(S.filter)}"></label>` : ''}`;
+  if (back) $('#tb-back').onclick = back;
+  const s = $('#search');
+  if (s) s.oninput = () => { S.filter = s.value; rerender(); };
+}
+const content = () => $('#content');
+let rerender = () => {};
+
+function go(page, opts = {}) {
+  if (!PAGES.some((p) => p.id === page)) page = 'apps';
+  if (S.page !== page) { S.filter = ''; S.sel.clear(); }
+  S.page = page; LS.set('page', page);
+  if (!opts.keepDetail) S.detail = null;
+  renderSidebar();
+  const fn = { apps: pageApps, orphans: pageOrphans, development: pageDev, fileSearch: pageSearch, lipo: pageLipo, updater: pageUpdater,
+    homebrew: pageBrew, packages: pagePackages, plugins: pagePlugins, services: pageServices }[page];
+  content().onscroll = null;
+  fn();
+}
+
+/* ------------------------------------------------------------ shared list helpers */
+function emptyBox(icon, title, text, button) {
+  return `<div class="empty"><div class="box"><div class="big-ic">${icon}</div><b>${esc(title)}</b><div class="hint">${text || ''}</div>${button || ''}</div></div>`;
+}
+const loadingBox = (text) => `<div class="loading"><span class="spin"></span><div>${esc(text || 'Loading…')}</div></div>`;
+const matches = (q, ...fields) => !q || fields.some((f) => f && String(f).toLowerCase().includes(q.toLowerCase()));
+function deniedBanner(denied) {
+  if (!denied || !denied.length) return '';
+  const os = S.st && S.st.macosMajor >= 27 ? 'macOS 27 keeps other apps’ data private unless Pearfin has Full Disk Access.' : 'Pearfin needs Full Disk Access to look there.';
+  return `<div class="banner">${I.warn}<div class="grow">macOS didn't let Pearfin look in ${plural(denied.length, 'folder')}, so some files may be missing. ${esc(os)}</div><button class="btn sm" data-act="perm">Permissions…</button></div>`;
+}
+document.addEventListener('click', (e) => { const b = e.target.closest('[data-act="perm"]'); if (b) permissionsDlg(); });
+
+/** Checkbox list of paths with sizes. state: {items:[{path,size,...}], checked:Set} */
+function fileRows(items, checked, opts = {}) {
+  return items.map((f, i) => {
+    const isApp = f.path.endsWith('.app');
+    const fb = f.dir ? (isApp ? I.app : fa('folder', 14, 'var(--folder)')) : I.file;
+    const badges = [f.bundle ? '<i class="bdg blue">App</i>' : '', f.linked ? `<i class="bdg purple" title="You linked this file to the app">${I.link} Linked</i>` : '',
+      f.protected ? `<i class="bdg orange" title="Removing this asks for your Mac password">${I.lock} Admin</i>` : '', opts.badge ? opts.badge(f) : ''].join('');
+    return `<div class="row${checked.has(f.path) ? '' : ' off'}" data-i="${i}" data-path="${esc(f.path)}">
+      <div style="padding-right:0"><input type="checkbox" class="cb" ${checked.has(f.path) ? 'checked' : ''}></div>
+      <div class="c-name">${pic(f.path, 20, fb)}<div class="two"><span class="nm">${esc(opts.name ? opts.name(f) : baseOf(f.path))}</span><small>${esc(tild(opts.sub ? opts.sub(f) : parentOf(f.path)))}</small></div></div>
+      <div><span class="bdgs">${badges}</span></div>
+      <div class="c-r c-dim">${f.size != null ? fmtSize(f.size) : '<span class="spin" style="width:10px;height:10px"></span>'}</div></div>`;
+  }).join('');
+}
+/** Wires checkbox toggles, ⇧-click ranges, and the context menu for a fileRows list. */
+function wireFileRows(root, getItems, checked, onChange, ctx) {
+  let last = null;
+  root.onclick = (e) => {
+    const row = e.target.closest('.row[data-path]'); if (!row) return;
+    const items = getItems(); const i = +row.dataset.i; const p = row.dataset.path;
+    if (e.shiftKey && last != null) {
+      const [a, b] = [Math.min(last, i), Math.max(last, i)]; const on = !checked.has(p);
+      for (let k = a; k <= b; k++) on ? checked.add(items[k].path) : checked.delete(items[k].path);
+    } else checked.has(p) ? checked.delete(p) : checked.add(p);
+    last = i; onChange();
+  };
+  root.oncontextmenu = (e) => {
+    const row = e.target.closest('.row[data-path]'); if (!row) return;
+    e.preventDefault();
+    const p = row.dataset.path;
+    showMenu([
+      { label: 'Show in Finder', action: () => api('POST', 'reveal', null, { path: p }) },
+      { label: 'Copy Path', action: () => copy(p) },
+      ...(ctx ? ctx(p, getItems()[+row.dataset.i]) : []),
+    ], e.clientX, e.clientY);
+  };
+}
+async function copy(text) { try { await navigator.clipboard.writeText(text); toast('Copied'); } catch { await modal({ title: 'Path', html: `<div class="mono">${esc(text)}</div>`, buttons: [{ label: 'OK', value: true, primary: true }] }); } }
+
+/** Moves paths to the Trash, with optional confirmation, then offers Undo. */
+async function trashPaths(paths, name, extra = {}) {
+  if (!paths.length) return null;
+  if (S.settings.confirmDelete && !extra.noConfirm) {
+    const r = await confirmDlg(extra.title || `Move ${plural(paths.length, 'item')} to the Trash?`, extra.message || 'You can put them back from Restore Deleted Files, or from the Trash.', 'Move to Trash', true);
+    if (!r) return null;
+  }
+  let res;
+  try { res = await api('POST', 'trash', null, { paths, name, ...extra.body }); }
+  catch (e) {
+    if (e.data && e.data.reason === 'running') {
+      const q = await confirmDlg(e.message, 'Pearfin can quit it for you, then continue.', 'Quit and Continue');
+      if (!q) return null;
+      res = await api('POST', 'trash', null, { paths, name, ...extra.body, quit: true });
+    } else throw e;
+  }
+  if (res.failed.length) {
+    const first = res.failed[0];
+    if (res.moved) toast(`Moved ${plural(res.moved, 'item')}; ${res.failed.length} couldn't be moved: ${first.error}`, true);
+    else toast(`Couldn't move ${baseOf(first.path)}: ${first.error}`, true);
+  } else if (res.moved) {
+    toast(`Moved ${plural(res.moved, 'item')} to the Trash${res.size ? ' (' + fmtSize(res.size) + ')' : ''}`, false, res.record ? { label: 'Undo', run: () => restore([res.record]) } : null);
+  }
+  if (res.brew) setTimeout(() => toast(res.brew), 3000);
+  refreshDisk();
+  return res;
+}
+async function restore(ids) {
+  try {
+    const r = await api('POST', 'history/restore', null, { ids });
+    toast(r.failed.length ? `Put back ${plural(r.restored, 'item')}; ${r.failed.length} couldn't be: ${r.failed[0].error}` : `Put back ${plural(r.restored, 'item')}`, !!r.failed.length);
+    S.apps = null; S.cache = {}; go(S.page);
+  } catch (e) { showError(e); }
+}
+async function refreshDisk() { try { const st = await api('GET', 'state'); S.st = st; S.settings = st.settings; renderStorage(); renderPermDot(); } catch {} }
+
+/* ============================================================ APPS */
+function sortApps(list) {
+  const { key, dir } = S.sort;
+  const v = (a) => key === 'size' ? a.size : key === 'created' ? a.created || 0 : key === 'added' ? a.added || 0 : key === 'modified' ? a.modified || 0 : key === 'lastUsed' ? a.lastUsed || 0 : null;
+  return list.slice().sort((a, b) => {
+    if (key === 'name') return dir * a.name.localeCompare(b.name, undefined, { sensitivity: 'base', numeric: true });
+    return dir * (v(a) - v(b)) || a.name.localeCompare(b.name);
+  });
+}
+const SORTS = [['name', 'App Name'], ['size', 'App Size'], ['created', 'Date Created'], ['added', 'Date Added'], ['modified', 'Modified Date'], ['lastUsed', 'Last Used Date']];
+function appBadges(a, full) {
+  if (!S.settings.showBadges && !full) return '';
+  const b = [];
+  if (a.wrapped) b.push('<i class="bdg blue" title="iPhone or iPad app">iOS</i>');
+  if (a.webApp) b.push('<i class="bdg blue" title="Web app">Web</i>');
+  if (a.steam) b.push('<i class="bdg purple">Steam</i>');
+  if (a.cask) b.push(`<i class="bdg orange" title="Installed with Homebrew (${esc(a.cask)})">brew</i>`);
+  if (full && a.appStore) b.push('<i class="bdg blue">App Store</i>');
+  if (full && a.sparkle) b.push('<i class="bdg">Sparkle</i>');
+  if (a.arch === 'intel' && S.nativeArch === 'arm') b.push(`<i class="bdg red" title="${S.st && S.st.macosMajor >= 27 ? 'Intel-only: needs Rosetta, which macOS 27 is phasing out' : 'Intel-only: runs through Rosetta'}">Intel</i>`);
+  if (full && a.arch === 'universal') b.push('<i class="bdg green">Universal</i>');
+  if (full && a.arch === 'arm') b.push('<i class="bdg">Apple silicon</i>');
+  return b.join('');
+}
+
+async function loadApps(refresh) {
+  if (S.appsLoading) return;
+  S.appsLoading = true;
+  try {
+    const r = await api('GET', 'apps', refresh ? { refresh: 1 } : null);
+    S.apps = r.apps; S.nativeArch = r.nativeArch;
+  } catch (e) { showError(e); S.apps = S.apps || []; }
+  S.appsLoading = false;
+  renderSidebar();
+}
+
+function pageApps() {
+  if (S.detail) return pageAppDetail();
+  const multi = S.sel.size > 1;
+  toolbar({
+    title: 'Apps',
+    actions: `<button class="tb" id="tb-sort" title="Sort">${I.sort}</button>
+      <div class="seg" id="seg-view"><button data-view="grid" class="${S.view === 'grid' ? 'on' : ''}" title="Icons">${I.grid}</button><button data-view="list" class="${S.view === 'list' ? 'on' : ''}" title="List">${I.list}</button></div>
+      <button class="tb" id="tb-refresh" title="Refresh (⌘R)">${I.refresh}</button>`,
+    placeholder: 'Search apps',
+  });
+  $('#tb-sort').onclick = (e) => showMenu([{ head: 'Sort by' }, ...SORTS.map(([k, l]) => ({ label: l, checked: S.sort.key === k, action: () => { S.sort = { key: k, dir: S.sort.key === k ? -S.sort.dir : k === 'name' ? 1 : -1 }; LS.set('sort', S.sort); render(); } }))], 0, 0, e.currentTarget);
+  $$('#seg-view button').forEach((b) => b.onclick = () => { S.view = b.dataset.view; LS.set('view', S.view); pageApps(); });
+  $('#tb-refresh').onclick = async () => { S.apps = null; render(); await loadApps(true); render(); };
+  const c = content();
+  const render = () => {
+    if (!S.apps) { c.innerHTML = loadingBox('Finding your apps…'); setStatus('Scanning app folders…'); return; }
+    const list = sortApps(S.apps.filter((a) => matches(S.filter, a.name, a.bundleId)));
+    const user = list.filter((a) => !a.system), sys = list.filter((a) => a.system);
+    const total = list.reduce((n, a) => n + (a.size || 0), 0);
+    if (!list.length) { c.innerHTML = emptyBox(I.apps, S.filter ? 'No apps match' : 'No apps found', S.filter ? 'Try a different search.' : 'Check Settings → Folders.'); setStatus(''); return; }
+    const sec = (t, arr) => !arr.length ? '' : `<div class="grp">${esc(t)}<span class="r">${plural(arr.length, 'app')} · ${fmtSize(arr.reduce((n, a) => n + a.size, 0))}</span></div>` + (S.view === 'grid'
+      ? `<div class="grid">${arr.map((a) => `<div class="tile${S.sel.has(a.path) ? ' sel' : ''}" data-path="${esc(a.path)}"><div class="ic">${pic(a.container || a.path, 64, fa('cube', 44, 'var(--text3)'), 'ic')}</div><div class="nm">${esc(a.name)}</div><div class="sub">${fmtSize(a.size)}</div></div>`).join('')}</div>`
+      : arr.map((a) => `<div class="row${S.sel.has(a.path) ? ' sel' : ''}" data-path="${esc(a.path)}">
+          <div class="c-name">${pic(a.container || a.path, 20, I.app)}<span class="nm">${esc(a.name)}</span><span class="bdgs">${appBadges(a)}</span></div>
+          <div class="c-dim">${esc(a.version || '--')}</div><div class="c-r c-dim">${fmtSize(a.size)}</div><div class="c-dim">${S.sort.key === 'added' ? fmtDate(a.added) : S.sort.key === 'created' ? fmtDate(a.created) : S.sort.key === 'modified' ? fmtDate(a.modified) : fmtDate(a.lastUsed)}</div></div>`).join(''));
+    const dcol = { added: 'Date Added', created: 'Date Created', modified: 'Date Modified' }[S.sort.key] || 'Last Opened';
+    const head = S.view === 'grid' ? '' : `<div class="list-head"><button data-k="name" class="${S.sort.key === 'name' ? 'sorted' : ''}">Name</button><div>Version</div><button data-k="size" class="r ${S.sort.key === 'size' ? 'sorted' : ''}">Size</button><button data-k="${['added', 'created', 'modified'].includes(S.sort.key) ? S.sort.key : 'lastUsed'}" class="${['added', 'created', 'modified', 'lastUsed'].includes(S.sort.key) ? 'sorted' : ''}">${dcol}</button></div>`;
+    c.innerHTML = `<section class="files" id="files" tabindex="0" style="--cols:minmax(240px,1fr) 120px 90px 150px">${head}${sec('User Apps', user)}${sec('System Apps', sys)}</section>
+      ${S.sel.size > 1 ? `<div class="actionbar"><div class="info"><b>${plural(S.sel.size, 'app')} selected</b> · ${fmtSize(S.apps.filter((a) => S.sel.has(a.path)).reduce((n, a) => n + a.size, 0))} plus their files</div><button class="btn" id="ab-clear">Deselect</button><button class="btn danger" id="ab-uninstall">Uninstall ${S.sel.size} Apps…</button></div>` : ''}`;
+    setStatus(S.filter ? `${plural(list.length, 'app')} found` : `${plural(list.length, 'app')}`, `${fmtSize(total)} in apps`);
+    const f = $('#files');
+    $$('.list-head button', f).forEach((b) => b.onclick = () => { const k = b.dataset.k; S.sort = { key: k, dir: S.sort.key === k ? -S.sort.dir : k === 'name' ? 1 : -1 }; LS.set('sort', S.sort); render(); });
+    f.onclick = (e) => {
+      const it = e.target.closest('[data-path]'); if (!it) { if (!e.metaKey && !e.shiftKey && S.sel.size) { S.sel.clear(); render(); } return; }
+      const p = it.dataset.path;
+      if (e.metaKey) { S.sel.has(p) ? S.sel.delete(p) : S.sel.add(p); S.anchor = p; render(); return; }
+      if (e.shiftKey && S.anchor) {
+        const order = [...user, ...sys].map((a) => a.path); const [i, j] = [order.indexOf(S.anchor), order.indexOf(p)].sort((x, y) => x - y);
+        order.slice(i, j + 1).forEach((x) => S.sel.add(x)); render(); return;
+      }
+      S.sel.clear(); S.anchor = p; openApp(p);
+    };
+    f.oncontextmenu = (e) => {
+      const it = e.target.closest('[data-path]'); if (!it) return; e.preventDefault();
+      const a = S.apps.find((x) => x.path === it.dataset.path); if (!a) return;
+      showMenu([
+        { label: 'Show Files', action: () => openApp(a.path) },
+        { label: 'Show in Finder', action: () => api('POST', 'reveal', null, { path: a.container || a.path }) },
+        { label: 'Open', action: () => api('POST', 'open', null, { path: a.container || a.path }) },
+        { label: 'Copy Path', action: () => copy(a.container || a.path) },
+        '-',
+        { label: S.sel.size > 1 && S.sel.has(a.path) ? `Uninstall ${S.sel.size} Apps…` : 'Uninstall…', danger: true, action: () => S.sel.size > 1 && S.sel.has(a.path) ? bulkUninstall() : openApp(a.path, true) },
+      ], e.clientX, e.clientY);
+    };
+    if (S.sel.size > 1) { $('#ab-clear').onclick = () => { S.sel.clear(); render(); }; $('#ab-uninstall').onclick = bulkUninstall; }
+  };
+  rerender = render;
+  render();
+  if (!S.apps) loadApps(false).then(() => { if (S.page === 'apps' && !S.detail) render(); });
+}
+
+function openApp(path, uninstallNow) { S.detail = { path, uninstallNow }; S.filter = ''; pageAppDetail(); }
+
+async function bulkUninstall() {
+  const apps = S.apps.filter((a) => S.sel.has(a.path));
+  const c = await confirmDlg(`Uninstall ${plural(apps.length, 'app')}?`, `${apps.map((a) => a.name).join(', ')} and the files Pearfin finds for each will be moved to the Trash. Open apps are quit first.`, 'Uninstall', true);
+  if (!c) return;
+  let moved = 0, failed = 0;
+  for (const [i, a] of apps.entries()) {
+    setStatus(`Uninstalling ${a.name} (${i + 1} of ${apps.length})…`);
+    try {
+      const r = await api('POST', 'app/files', null, { path: a.path });
+      const res = await api('POST', 'trash', null, { paths: r.files.map((f) => f.path), name: a.name, app: a.container || a.path, quit: true });
+      moved += res.moved; failed += res.failed.length;
+    } catch (e) { failed++; }
+  }
+  toast(failed ? `Moved ${plural(moved, 'item')} to the Trash; ${failed} couldn't be moved` : `Uninstalled ${plural(apps.length, 'app')} (${plural(moved, 'item')} moved to the Trash)`, failed > 0);
+  S.sel.clear(); await loadApps(false); refreshDisk(); pageApps();
+}
+
+async function pageAppDetail() {
+  const d = S.detail;
+  const a0 = (S.apps || []).find((x) => x.path === d.path || x.container === d.path);
+  toolbar({ back: () => { S.detail = null; pageApps(); }, title: a0 ? a0.name : appName(d.path), search: true, placeholder: 'Filter files',
+    actions: `<button class="tb" id="tb-sort" title="Sort files">${I.sort}</button><button class="tb" id="tb-refresh" title="Search again (⌘R)">${I.refresh}</button>` });
+  const c = content();
+  c.innerHTML = loadingBox(`Looking for ${a0 ? a0.name : appName(d.path)}'s files…`);
+  setStatus('Searching…');
+  let info, res;
+  try {
+    info = await api('GET', 'app', { path: d.path });
+    if (S.detail !== d) return;
+    res = await api('POST', 'app/files', null, { path: info.app.path });
+  } catch (e) {
+    if (S.detail !== d) return;
+    c.innerHTML = emptyBox(I.warn, "Couldn't read this app", esc(e.message), '<button class="btn" id="eb-back">Back to Apps</button>');
+    $('#eb-back').onclick = () => { S.detail = null; pageApps(); };
+    return;
+  }
+  if (S.detail !== d) return;
+  const a = info.app;
+  $('#tb-title').textContent = a.name;
+  const checked = new Set(res.files.map((f) => f.path));
+  d.sortKey = d.sortKey || 'size';
+  const sorted = () => {
+    const files = res.files.filter((f) => matches(S.filter, f.path));
+    const k = d.sortKey;
+    return files.sort((x, y) => (y.bundle - x.bundle) || (k === 'size' ? y.size - x.size : k === 'path' ? x.path.localeCompare(y.path) : baseOf(x.path).localeCompare(baseOf(y.path))));
+  };
+  $('#tb-sort').onclick = (e) => showMenu([{ head: 'Sort files by' }, ...[['name', 'Name'], ['path', 'Path'], ['size', 'Size']].map(([k, l]) => ({ label: l, checked: d.sortKey === k, action: () => { d.sortKey = k; render(); } }))], 0, 0, e.currentTarget);
+  $('#tb-refresh').onclick = () => pageAppDetail();
+  const bundle = a.container || a.path;
+  const levelName = { strict: 'Strict', enhanced: 'Enhanced', deep: 'Deep' };
+  const level = info.sensitivity || S.settings.sensitivity;
+  const render = () => {
+    const files = sorted();
+    const sel = res.files.filter((f) => checked.has(f.path));
+    const selSize = sel.reduce((n, f) => n + f.size, 0);
+    const bundleOn = checked.has(bundle);
+    const total = res.files.reduce((n, f) => n + f.size, 0);
+    c.innerHTML = `<section class="files" id="files" tabindex="0" style="--cols:30px minmax(240px,1fr) auto 90px">
+      <div class="detail" style="padding:12px 0 0"><div class="hcard">
+        <div class="big">${pic(bundle, 72, fa('cube', 46, 'var(--text3)'), 'big')}</div>
+        <div class="meta"><h1>${esc(a.name)}</h1>
+          <div class="sub">${esc(a.version ? 'Version ' + a.version + (a.build && a.build !== a.version ? ' (' + a.build + ')' : '') : 'No version')} · ${esc(a.bundleId)}${a.teamId ? ' · Team ' + esc(a.teamId) : ''}</div>
+          <div class="sub">${esc(tild(bundle))}</div>
+          <div class="bdgs">${appBadges(a, true)}${info.running ? '<i class="bdg green">Open</i>' : ''}<i class="bdg" title="Search sensitivity for this app">${esc(levelName[level] || 'Strict')}${info.sensitivity ? ' (this app)' : ''}</i>${info.lipoSavings ? `<i class="bdg green" title="Lipo can remove the ${S.nativeArch === 'arm' ? 'Intel' : 'Apple silicon'} code">Lipo saves ${fmtSize(info.lipoSavings)}</i>` : ''}</div>
+        </div>
+        <div class="acts"><button class="btn" id="d-more">Options ${fa('chevron-down', 10)}</button></div>
+      </div></div>
+      ${deniedBanner(res.denied)}
+      ${a.system && !bundleOn ? '' : ''}
+      <div class="subbar"><label class="check"><input type="checkbox" class="cb" id="d-all" ${sel.length === res.files.length ? 'checked' : ''}> ${sel.length === res.files.length ? 'Deselect All' : 'Select All'}</label><span class="grow"></span><span>${plural(res.files.length, 'item')} · ${fmtSize(total)}${res.spotlight ? ` · ${res.spotlight} from Spotlight` : ''}</span></div>
+      <div id="d-rows">${files.length ? fileRows(files, checked) : `<div class="hint" style="padding:16px 10px">No files match “${esc(S.filter)}”.</div>`}</div>
+    </section>
+    <div class="actionbar"><div class="info"><b>${plural(sel.length, 'item')}</b> selected · ${fmtSize(selSize)}${bundleOn ? '' : ' · the app itself stays'}</div>
+      <button class="btn danger" id="d-go" ${sel.length ? '' : 'disabled'}>${bundleOn ? 'Uninstall' : 'Remove ' + plural(sel.length, 'Item')}</button></div>`;
+    setStatus(`${plural(res.files.length, 'item')} found in ${(res.millis / 1000).toFixed(1)} s`, fmtSize(total));
+    $('#d-all').onchange = () => { if (sel.length === res.files.length) checked.clear(); else res.files.forEach((f) => checked.add(f.path)); render(); };
+    wireFileRows($('#d-rows'), sorted, checked, render, (p, f) => [
+      '-',
+      f && f.linked ? { label: 'Unlink from This App', action: async () => { await api('POST', 'link', null, { app: bundle, paths: [p], unlink: true }); pageAppDetail(); } } : null,
+      f && !f.bundle ? { label: 'Exclude from Future Searches', action: async () => { const r = await api('POST', 'exclude', null, { list: 'apps', paths: [p] }); S.settings = r.settings; res.files = res.files.filter((x) => x.path !== p); checked.delete(p); render(); toast('Excluded. Edit the list in Settings → Folders.'); } } : null,
+    ]);
+    $('#d-more').onclick = (e) => showMenu([
+      { label: 'Show in Finder', action: () => api('POST', 'reveal', null, { path: bundle }) },
+      { label: 'Open App', action: () => api('POST', 'open', null, { path: bundle }) },
+      info.running ? { label: 'Quit App', action: async () => { await api('POST', 'app/quit', null, { path: bundle }); toast(`${a.name} quit`); info.running = false; render(); } } : null,
+      '-',
+      info.lipoSavings ? { label: `Lipo (save ${fmtSize(info.lipoSavings)})…`, action: () => lipoApps([bundle]).then(() => pageAppDetail()) } : null,
+      { label: 'Remove Translations…', action: () => translationsDlg(a) },
+      { label: 'Export File List', action: async () => { const r = await api('POST', 'export', null, { paths: res.files.map((f) => f.path), name: a.name }); toast('Saved to ' + tild(r.file)); } },
+      '-', { head: 'Search sensitivity' },
+      ...['', 'strict', 'enhanced', 'deep'].map((l) => ({ label: l ? levelName[l] : `Default (${levelName[S.settings.sensitivity]})`, checked: (info.sensitivity || '') === l,
+        action: async () => { await api('POST', 'app/sensitivity', null, { path: bundle, level: l }); pageAppDetail(); } })),
+    ], 0, 0, e.currentTarget);
+    $('#d-go').onclick = go2;
+  };
+  const go2 = async () => {
+    const paths = res.files.filter((f) => checked.has(f.path)).map((f) => f.path);
+    const all = checked.has(bundle);
+    const r = await trashPaths(paths, a.name, { title: all ? `Uninstall ${a.name}?` : `Remove ${plural(paths.length, 'item')}?`,
+      message: all ? `${a.name} and ${plural(paths.length - 1, 'related item')} (${fmtSize(res.files.filter((f) => checked.has(f.path)).reduce((n, f) => n + f.size, 0))}) will be moved to the Trash.` : 'They will be moved to the Trash. The app itself stays.',
+      body: { app: bundle } }).catch(showError);
+    if (!r) return;
+    if (all && r.moved) { S.apps = (S.apps || []).filter((x) => x.path !== a.path); S.detail = null; pageApps(); renderSidebar(); }
+    else pageAppDetail();
+  };
+  rerender = render;
+  render();
+  if (d.uninstallNow) { d.uninstallNow = false; go2(); }
+}
+
+async function translationsDlg(a) {
+  let r;
+  try { r = await api('GET', 'languages', { path: a.path }); } catch (e) { return showError(e); }
+  if (!r.languages.length) return okDlg('No translations', `${a.name} has no removable language files.`);
+  const html = `<p>Keep the languages you use. Files go to the Trash. Your Mac's languages: ${esc(r.preferred.join(', '))}.</p>
+    <div class="dlist">${r.languages.map((l, i) => `<label class="row" style="grid-template-columns:30px minmax(0,1fr) auto"><div><input type="checkbox" class="cb" name="l${i}" ${l.preferred ? '' : 'checked'}></div><div>${esc(l.name)} <span class="c-dim">${esc(l.code)}</span>${l.preferred ? ' <i class="bdg green">Preferred</i>' : ''}</div><div class="c-r c-dim">${fmtSize(l.size)}</div></label>`).join('')}</div>`;
+  const res = await modal({ title: `Remove translations from ${a.name}`, html, wide: true, buttons: [{ label: 'Cancel', value: null }, { label: 'Remove Selected', value: true, primary: true, danger: true }] });
+  if (!res) return;
+  const paths = r.languages.filter((l, i) => res.form[`l${i}`].checked).flatMap((l) => l.paths);
+  if (!paths.length) return;
+  await trashPaths(paths, `${a.name} - Translations`, { noConfirm: true }).catch(showError);
+}
+
+/* ============================================================ ORPHANS */
+function pageOrphans() {
+  const st = S.cache.orphans || (S.cache.orphans = { items: null, checked: new Set(), denied: [], running: false, progress: null });
+  toolbar({ title: 'Orphaned Files', placeholder: 'Filter',
+    actions: `<button class="tb label" id="tb-scan">${st.running ? I.stop + ' Stop' : I.refresh + (st.items ? ' Scan Again' : ' Scan')}</button>` });
+  $('#tb-scan').onclick = () => st.running ? api('POST', 'task/stop', null, { id: st.task }) : scan();
+  const c = content();
+  const visible = () => (st.items || []).filter((f) => matches(S.filter, f.path));
+  const render = () => {
+    if (S.page !== 'orphans') return;
+    if (st.running && !st.items) {
+      const p = st.progress || {};
+      c.innerHTML = loadingBox(p.step ? `Scanning ${p.step}${p.found != null ? ` · ${p.found} found` : ''}` : 'Scanning…');
+      setStatus('Scanning Library folders…'); return;
+    }
+    if (!st.items) {
+      c.innerHTML = emptyBox(I.orphans, 'Orphaned Files', 'Find files and folders left behind by apps you already deleted. Pearfin compares Library folders against your installed apps.', '<button class="btn primary" id="eb-scan" style="margin-top:6px">Scan</button>');
+      $('#eb-scan').onclick = scan; setStatus(''); return;
+    }
+    const items = visible();
+    const sel = st.items.filter((f) => st.checked.has(f.path));
+    const total = st.items.reduce((n, f) => n + f.size, 0);
+    c.innerHTML = `<section class="files" tabindex="0" style="--cols:30px minmax(240px,1fr) auto 90px">
+      <div class="banner info" style="margin-top:12px">${I.info}<div class="grow">This is a best guess: Pearfin can't see apps that are already gone, so it hides anything that matches an installed app. Check that what you select really belongs to deleted apps.</div></div>
+      ${deniedBanner(st.denied)}
+      <div class="subbar"><label class="check"><input type="checkbox" class="cb" id="o-all" ${sel.length && sel.length === st.items.length ? 'checked' : ''}> Select All</label><span class="grow"></span><span>${plural(st.items.length, 'item')} · ${fmtSize(total)}</span></div>
+      <div id="o-rows">${items.length ? fileRows(items, st.checked) : `<div class="hint" style="padding:16px 10px">${st.items.length ? 'Nothing matches the filter.' : 'No orphaned files found. Nice and tidy.'}</div>`}</div></section>
+      <div class="actionbar"><div class="info"><b>${plural(sel.length, 'item')}</b> selected · ${fmtSize(sel.reduce((n, f) => n + f.size, 0))}</div>
+        <button class="btn" id="o-link" ${sel.length ? '' : 'disabled'} title="Link the selected files to an installed app, so they're removed with it and not listed here">Link to App…</button>
+        <button class="btn" id="o-ex" ${sel.length ? '' : 'disabled'}>Exclude</button>
+        <button class="btn danger" id="o-del" ${sel.length ? '' : 'disabled'}>Move to Trash</button></div>`;
+    setStatus(`${plural(st.items.length, 'orphaned item')}`, fmtSize(total));
+    $('#o-all').onchange = (e) => { if (e.target.checked) st.items.forEach((f) => st.checked.add(f.path)); else st.checked.clear(); render(); };
+    wireFileRows($('#o-rows'), visible, st.checked, render);
+    $('#o-del').onclick = async () => {
+      const paths = sel.map((f) => f.path);
+      const r = await trashPaths(paths, 'Orphaned Files').catch(showError);
+      if (r && r.moved) { const gone = new Set(paths.filter((p) => !r.failed.some((f) => f.path === p))); st.items = st.items.filter((f) => !gone.has(f.path)); gone.forEach((p) => st.checked.delete(p)); render(); }
+    };
+    $('#o-ex').onclick = async () => {
+      const paths = sel.map((f) => f.path);
+      const r = await api('POST', 'exclude', null, { list: 'orphans', paths }); S.settings = r.settings;
+      st.items = st.items.filter((f) => !paths.includes(f.path)); paths.forEach((p) => st.checked.delete(p)); render();
+      toast(`Excluded ${plural(paths.length, 'item')}. Edit the list in Settings → Folders.`);
+    };
+    $('#o-link').onclick = async () => {
+      if (!S.apps) await loadApps(false);
+      const opts = sortApps(S.apps).map((a) => `<option value="${esc(a.container || a.path)}">${esc(a.name)}</option>`).join('');
+      const r = await modal({ title: 'Link to an app', message: `When you uninstall the app you choose, Pearfin includes these ${plural(sel.length, 'item')}. They also stop showing up here.`, html: `<select class="field" name="app">${opts}</select>`,
+        buttons: [{ label: 'Cancel', value: null }, { label: 'Link', value: true, primary: true }] });
+      if (!r) return;
+      const paths = sel.map((f) => f.path);
+      await api('POST', 'link', null, { app: r.form.app.value, paths });
+      st.items = st.items.filter((f) => !paths.includes(f.path)); paths.forEach((p) => st.checked.delete(p)); render();
+      toast(`Linked to ${appName(r.form.app.value)}`);
+    };
+  };
+  async function scan() {
+    if (!S.settings.orphanWarningSeen) {
+      const ok = await modal({ title: 'Before you scan', message: "Orphaned file search isn't 100% accurate: it has no uninstalled app bundles to compare against, so it makes a best guess and hides anything that matches the apps you have now. Please confirm the files you remove really belong to apps you deleted.", buttons: [{ label: 'Cancel', value: null }, { label: 'I Understand', value: true, primary: true }] });
+      if (!ok) return;
+      const r = await api('POST', 'settings', null, { orphanWarningSeen: true }); S.settings = r.settings;
+    }
+    st.running = true; st.items = null; st.checked.clear(); st.progress = null; pageOrphans();
+    try {
+      const { task } = await api('POST', 'orphans/start'); st.task = task;
+      const t = await follow(task, { onProgress: (p) => { st.progress = p; render(); } });
+      st.items = (t.result && t.result.items) || []; st.denied = (t.result && t.result.denied) || [];
+      st.items.sort((x, y) => y.size - x.size);
+    } catch (e) { showError(e); st.items = st.items || null; }
+    st.running = false;
+    if (S.page === 'orphans') pageOrphans();
+  }
+  rerender = render; render();
+}
+
+/* ============================================================ DEVELOPER */
+function pageDev() {
+  const st = S.cache.dev || (S.cache.dev = { envs: null, env: 'All', checked: new Set(), ws: null });
+  toolbar({ title: 'Developer', placeholder: 'Filter paths', actions: `<button class="tb" id="tb-refresh" title="Refresh">${I.refresh}</button>` });
+  $('#tb-refresh').onclick = () => { st.envs = null; st.checked.clear(); pageDev(); };
+  const c = content();
+  const all = () => (st.envs || []).flatMap((e) => e.paths.map((p) => ({ ...p, env: e.name })));
+  const visible = () => all().filter((p) => (st.env === 'All' || p.env === st.env) && matches(S.filter, p.path));
+  const render = () => {
+    if (S.page !== 'development') return;
+    if (!st.envs) { c.innerHTML = loadingBox('Measuring developer caches…'); return; }
+    const envs = st.envs.filter((e) => e.paths.length);
+    const sum = (arr) => arr.reduce((n, p) => n + p.size, 0);
+    const items = visible().sort((x, y) => y.size - x.size);
+    const sel = all().filter((p) => st.checked.has(p.path));
+    c.innerHTML = `<section class="files" tabindex="0" style="--cols:30px minmax(240px,1fr) auto 90px">
+      <div class="chips"><button class="chip ${st.env === 'All' ? 'on' : ''}" data-env="All">All <small>${fmtSize(sum(all()))}</small></button>${envs.map((e) => `<button class="chip ${st.env === e.name ? 'on' : ''}" data-env="${esc(e.name)}">${esc(e.name)} <small>${fmtSize(sum(e.paths))}</small></button>`).join('')}</div>
+      ${envs.length ? `<div id="v-rows">${fileRows(items, st.checked, { name: (f) => tild(f.path), sub: (f) => f.env, badge: (f) => '' })}</div>` : emptyBox(I.dev, 'Nothing to clean', 'No caches from common developer tools were found.')}
+      <div class="grp" style="margin-top:14px">Workspace Storage Cleaner<span class="r"></span></div>
+      <div class="hint" style="padding:0 10px 8px">VS Code and Cursor keep data for every project you open. Find entries for project folders that no longer exist.</div>
+      <div style="padding:0 10px 10px"><button class="btn sm" id="ws-scan">${st.ws ? 'Scan Again' : 'Find Orphaned Workspaces'}</button></div>
+      <div id="ws-rows">${st.ws ? (st.ws.length ? st.ws.map((w) => `<div class="row" style="grid-template-columns:minmax(0,1fr) 90px auto"><div class="c-name">${fa('folder-open', 13, 'var(--text3)')}<div class="two"><span class="nm">${esc(tild(w.project))}</span><small>${esc(w.editor)} · ${esc(baseOf(w.path))}</small></div></div><div class="c-r c-dim">${fmtSize(w.size)}</div><div><button class="btn sm" data-ws="${esc(w.path)}">Delete</button></div></div>`).join('') + `<div style="padding:8px 10px"><button class="btn sm danger" id="ws-all">Delete All (${fmtSize(st.ws.reduce((n, w) => n + w.size, 0))})</button></div>` : '<div class="hint" style="padding:0 10px">No orphaned workspaces found.</div>') : ''}</div>
+    </section>
+    <div class="actionbar"><div class="info"><b>${plural(sel.length, 'folder')}</b> selected · ${fmtSize(sum(sel))}</div>
+      <button class="btn" id="v-contents" ${sel.length ? '' : 'disabled'} title="Empty the folders but keep them">Delete Contents</button>
+      <button class="btn danger" id="v-folders" ${sel.length ? '' : 'disabled'}>Delete Folders</button></div>`;
+    setStatus(`${plural(all().length, 'cache folder')} found`, fmtSize(sum(all())));
+    $$('.chip[data-env]', c).forEach((b) => b.onclick = () => { st.env = b.dataset.env; render(); });
+    if ($('#v-rows')) wireFileRows($('#v-rows'), () => visible().sort((x, y) => y.size - x.size), st.checked, render);
+    const done = () => { st.envs = null; st.checked.clear(); pageDev(); };
+    $('#v-folders').onclick = async () => { const r = await trashPaths(sel.map((p) => p.path), 'Developer Caches').catch(showError); if (r) done(); };
+    $('#v-contents').onclick = async () => {
+      const { paths } = await api('POST', 'dev/contents', null, { paths: sel.map((p) => p.path) });
+      if (!paths.length) return toast('Those folders are already empty');
+      const r = await trashPaths(paths, 'Developer Caches', { title: `Empty ${plural(sel.length, 'folder')}?`, message: `${plural(paths.length, 'item')} inside them will be moved to the Trash. The folders stay.` }).catch(showError);
+      if (r) done();
+    };
+    $('#ws-scan').onclick = async () => { $('#ws-scan').disabled = true; try { st.ws = (await api('GET', 'dev/workspaces')).items; } catch (e) { showError(e); } render(); };
+    $$('[data-ws]', c).forEach((b) => b.onclick = async () => { const r = await trashPaths([b.dataset.ws], 'Workspace Storage').catch(showError); if (r && r.moved) { st.ws = st.ws.filter((w) => w.path !== b.dataset.ws); render(); } });
+    const wa = $('#ws-all'); if (wa) wa.onclick = async () => { const r = await trashPaths(st.ws.map((w) => w.path), 'Workspace Storage').catch(showError); if (r && r.moved) { st.ws = []; render(); } };
+  };
+  rerender = render; render();
+  if (!st.envs) api('GET', 'dev').then((r) => { st.envs = r.environments; render(); }).catch(showError);
+}
+
+/* ============================================================ FILE SEARCH */
+const FILTER_TYPES = {
+  name: { label: 'Name', ops: [['contains', 'contains'], ['doesntContain', "doesn't contain"], ['startsWith', 'starts with'], ['endsWith', 'ends with'], ['equals', 'is'], ['regex', 'matches regex']] },
+  extension: { label: 'Extension', ops: [['is', 'is'], ['isNot', 'is not']] },
+  size: { label: 'Size', ops: [['greaterThan', 'is larger than'], ['lessThan', 'is smaller than'], ['between', 'is between']] },
+  date: { label: 'Date', ops: [['modifiedAfter', 'modified after'], ['modifiedBefore', 'modified before'], ['modifiedBetween', 'modified between'], ['createdAfter', 'created after'], ['createdBefore', 'created before'], ['createdBetween', 'created between']] },
+  kind: { label: 'Kind', ops: [['is', 'is']] },
+  tags: { label: 'Tags', ops: [['contains', 'include'], ['doesntContain', "don't include"]] },
+  comment: { label: 'Comment', ops: [['contains', 'contains'], ['doesntContain', "doesn't contain"]] },
+};
+const KINDS = [['file', 'File'], ['folder', 'Folder'], ['app', 'Application'], ['image', 'Image'], ['video', 'Movie'], ['audio', 'Music'], ['document', 'Document'], ['archive', 'Archive']];
+function pageSearch() {
+  const st = S.cache.search || (S.cache.search = { filters: [{ type: 'name', op: 'contains', value: '' }], root: 'home', custom: '', hidden: false, packages: false, results: null, checked: new Set(), running: false, sort: { k: 'size', d: -1 } });
+  toolbar({ title: 'File Search', search: false, actions: `<button class="tb label" id="tb-go">${st.running ? I.stop + ' Stop' : I.play + ' Search'}</button>` });
+  $('#tb-go').onclick = () => st.running ? api('POST', 'task/stop', null, { id: st.task }) : run();
+  const c = content();
+  const unit = (v) => { const u = [['GB', 1e9], ['MB', 1e6], ['KB', 1e3]].find(([, m]) => v >= m && v % m === 0) || ['MB', 1e6]; return u; };
+  const dstr = (s) => s ? new Date(s * 1000).toISOString().slice(0, 10) : '';
+  const filterRow = (f, i) => {
+    const t = FILTER_TYPES[f.type];
+    let val = '';
+    if (f.type === 'size') {
+      const [u, m] = unit(f.value || 1e6); const mk = (n, v) => `<input class="field sm" type="number" min="0" step="any" name="${n}" value="${v ? v / m : ''}" style="width:90px">`;
+      val = `${mk('value', f.value)}${f.op === 'between' ? ' and ' + mk('max', f.max) : ''}<select class="field sm" name="unit">${['KB', 'MB', 'GB'].map((x) => `<option ${x === u ? 'selected' : ''}>${x}</option>`).join('')}</select>`;
+    } else if (f.type === 'date') {
+      val = `<input class="field sm" type="date" name="value" value="${dstr(f.value)}">${f.op.endsWith('Between') ? ` and <input class="field sm" type="date" name="max" value="${dstr(f.max)}">` : ''}`;
+    } else if (f.type === 'kind') {
+      val = `<select class="field sm grow" name="value">${KINDS.map(([k, l]) => `<option value="${k}" ${f.value === k ? 'selected' : ''}>${l}</option>`).join('')}</select>`;
+    } else {
+      val = `<input class="field sm grow" name="value" value="${esc(f.value || '')}" placeholder="${f.type === 'extension' ? 'mp4, mov' : f.type === 'tags' ? 'Red, Work' : ''}" spellcheck="false">`;
+    }
+    return `<div class="frow" data-i="${i}"><select class="field sm" name="type">${Object.entries(FILTER_TYPES).map(([k, v]) => `<option value="${k}" ${k === f.type ? 'selected' : ''}>${v.label}</option>`).join('')}</select>
+      <select class="field sm" name="op">${t.ops.map(([k, l]) => `<option value="${k}" ${k === f.op ? 'selected' : ''}>${l}</option>`).join('')}</select>${val}
+      <button class="x" data-rm="${i}" title="Remove filter">${I.x}</button></div>`;
+  };
+  const readFilters = () => {
+    $$('.frow', c).forEach((row) => {
+      const f = st.filters[+row.dataset.i]; if (!f) return;
+      const g = (n) => row.querySelector(`[name=${n}]`);
+      f.op = g('op').value;
+      if (f.type === 'size') { const m = { KB: 1e3, MB: 1e6, GB: 1e9 }[g('unit').value]; f.value = Math.round(parseFloat(g('value').value || 0) * m); f.max = g('max') ? Math.round(parseFloat(g('max').value || 0) * m) : null; }
+      else if (f.type === 'date') { const d = (el) => el && el.value ? Math.floor(new Date(el.value + 'T00:00:00').getTime() / 1000) : 0; f.value = d(g('value')); f.max = g('max') ? d(g('max')) + 86399 : null; }
+      else f.value = g('value').value;
+    });
+    st.root = $('#fs-root').value; st.custom = ($('#fs-custom') || {}).value || st.custom; st.hidden = $('#fs-hidden').checked; st.packages = $('#fs-pkg').checked;
+  };
+  const sortedResults = () => {
+    const { k, d } = st.sort;
+    return (st.results || []).filter((r) => true).sort((x, y) => d * (k === 'size' ? x.size - y.size : k === 'modified' ? (x.modified || 0) - (y.modified || 0) : k === 'kind' ? x.kind.localeCompare(y.kind) : x.name.localeCompare(y.name)));
+  };
+  const render = () => {
+    if (S.page !== 'fileSearch') return;
+    const res = sortedResults();
+    const sel = res.filter((r) => st.checked.has(r.path));
+    const hd = (k, l, r) => `<button data-k="${k}" class="${r ? 'r ' : ''}${st.sort.k === k ? 'sorted' : ''}">${l}</button>`;
+    c.innerHTML = `<div class="fbuilder">${st.filters.map(filterRow).join('')}
+      <div class="fopts"><button class="btn sm" id="fs-add">${I.plus} Add Filter</button>
+        <span class="c-dim">in</span><select class="field sm" id="fs-root" style="width:auto"><option value="home" ${st.root === 'home' ? 'selected' : ''}>Home folder</option><option value="/" ${st.root === '/' ? 'selected' : ''}>Startup Disk</option><option value="/Applications" ${st.root === '/Applications' ? 'selected' : ''}>Applications</option><option value="custom" ${st.root === 'custom' ? 'selected' : ''}>Folder…</option></select>
+        ${st.root === 'custom' ? `<input class="field sm" id="fs-custom" placeholder="/path/to/folder" value="${esc(st.custom)}" style="width:220px" spellcheck="false">` : ''}
+        <label class="check"><input type="checkbox" id="fs-hidden" ${st.hidden ? 'checked' : ''}> Hidden files</label>
+        <label class="check"><input type="checkbox" id="fs-pkg" ${st.packages ? 'checked' : ''}> Inside apps & packages</label></div></div>
+      <section class="files" tabindex="0" id="fs-files" style="--cols:30px minmax(220px,1fr) 110px 90px 150px">
+        ${st.results == null ? (st.running ? loadingBox('Searching…') : emptyBox(I.find, 'Ready to search', 'Add filters, then click Search.')) : !res.length ? (st.running ? loadingBox('Searching…') : emptyBox(I.find, 'No results', 'Try adjusting your filters.')) :
+        `<div class="list-head"><div></div>${hd('name', 'Name')}${hd('kind', 'Kind')}${hd('size', 'Size', 1)}${hd('modified', 'Modified')}</div>` +
+        res.slice(0, 3000).map((r, i) => `<div class="row${st.checked.has(r.path) ? ' sel' : ''}" data-i="${i}" data-path="${esc(r.path)}"><div style="padding-right:0"><input type="checkbox" class="cb" ${st.checked.has(r.path) ? 'checked' : ''}></div>
+          <div class="c-name">${pic(r.path, 20, r.dir ? fa('folder', 14, 'var(--folder)') : I.file)}<div class="two"><span class="nm">${esc(r.name)}</span><small>${esc(tild(parentOf(r.path)))}</small></div></div>
+          <div class="c-dim">${esc(r.kind)}</div><div class="c-r c-dim">${r.dir ? (r.size ? fmtSize(r.size) : '--') : fmtSize(r.size)}</div><div class="c-dim">${fmtDate(r.modified)}</div></div>`).join('') + (res.length > 3000 ? `<div class="hint" style="padding:10px">Showing the first 3,000 of ${res.length.toLocaleString()} results.</div>` : '')}
+      </section>
+      ${sel.length ? `<div class="actionbar"><div class="info"><b>${plural(sel.length, 'item')}</b> selected · ${fmtSize(sel.reduce((n, r) => n + r.size, 0))}</div>${sel.length === 1 ? '<button class="btn" id="fs-ren">Rename…</button>' : ''}<button class="btn" id="fs-show">Show in Finder</button><button class="btn danger" id="fs-del">Move to Trash</button></div>` : ''}`;
+    const p = st.progress || {};
+    setStatus(st.results ? `${plural(st.results.length, 'result')}${p.scanned ? ` · ${p.scanned.toLocaleString()} items checked` : ''}` : '', p.ms ? `Elapsed ${(p.ms / 1000).toFixed(1)} s` : '');
+    $$('.frow select[name=type]', c).forEach((s) => s.onchange = () => { readFilters(); const i = +s.closest('.frow').dataset.i; const t = s.value; st.filters[i] = { type: t, op: FILTER_TYPES[t].ops[0][0], value: t === 'kind' ? 'file' : t === 'size' ? 100e6 : t === 'date' ? Math.floor(Date.now() / 1000) - 30 * 86400 : '' }; render(); });
+    $$('.frow select[name=op]', c).forEach((s) => s.onchange = () => { readFilters(); render(); });
+    $$('[data-rm]', c).forEach((b) => b.onclick = () => { readFilters(); st.filters.splice(+b.dataset.rm, 1); if (!st.filters.length) st.filters.push({ type: 'name', op: 'contains', value: '' }); render(); });
+    $('#fs-add').onclick = () => { readFilters(); st.filters.push({ type: 'extension', op: 'is', value: '' }); render(); };
+    $('#fs-root').onchange = () => { readFilters(); render(); };
+    $$('.frow input', c).forEach((i) => i.onkeydown = (e) => { if (e.key === 'Enter') run(); });
+    const files = $('#fs-files');
+    $$('.list-head button', files).forEach((b) => b.onclick = () => { const k = b.dataset.k; st.sort = { k, d: st.sort.k === k ? -st.sort.d : k === 'size' || k === 'modified' ? -1 : 1 }; render(); });
+    files.onclick = (e) => { const row = e.target.closest('.row[data-path]'); if (!row) return; const p = row.dataset.path; st.checked.has(p) ? st.checked.delete(p) : st.checked.add(p); render(); };
+    files.ondblclick = (e) => { const row = e.target.closest('.row[data-path]'); if (row) api('POST', 'reveal', null, { path: row.dataset.path }); };
+    files.oncontextmenu = (e) => { const row = e.target.closest('.row[data-path]'); if (!row) return; e.preventDefault(); const p = row.dataset.path;
+      showMenu([{ label: 'Open', action: () => api('POST', 'open', null, { path: p }) }, { label: 'Show in Finder', action: () => api('POST', 'reveal', null, { path: p }) }, { label: 'Copy Path', action: () => copy(p) }, '-', { label: 'Move to Trash', danger: true, action: () => del([p]) }], e.clientX, e.clientY); };
+    if (sel.length) {
+      $('#fs-show').onclick = () => sel.slice(0, 10).forEach((r) => api('POST', 'reveal', null, { path: r.path }));
+      $('#fs-del').onclick = () => del(sel.map((r) => r.path));
+      const ren = $('#fs-ren'); if (ren) ren.onclick = async () => {
+        const r0 = sel[0]; const m = await modal({ title: 'Rename', input: true, inputValue: r0.name, buttons: [{ label: 'Cancel', value: null }, { label: 'Rename', value: true, primary: true }] });
+        if (!m || !m.input || m.input === r0.name) return;
+        try { const out = await api('POST', 'rename', null, { path: r0.path, name: m.input }); st.checked.delete(r0.path); r0.path = out.path; r0.name = m.input; render(); } catch (e) { showError(e); }
+      };
+    }
+  };
+  async function del(paths) {
+    const r = await trashPaths(paths, 'File Search').catch(showError);
+    if (r && r.moved) { const gone = new Set(paths.filter((p) => !r.failed.some((f) => f.path === p))); st.results = st.results.filter((x) => !gone.has(x.path)); gone.forEach((p) => st.checked.delete(p)); render(); }
+  }
+  async function run() {
+    readFilters();
+    const filters = st.filters.filter((f) => f.type === 'kind' || f.type === 'size' || f.type === 'date' || String(f.value || '').trim());
+    if (!filters.length) return toast('Type something to search for first', true);
+    const root = st.root === 'home' ? HOME : st.root === 'custom' ? st.custom : st.root;
+    st.running = true; st.results = []; st.checked.clear(); st.progress = null; pageSearch();
+    try {
+      const { task } = await api('POST', 'search/start', null, { root, filters, hidden: st.hidden, packages: st.packages });
+      st.task = task;
+      let last = 0;
+      await follow(task, { onItems: (items) => { st.results.push(...items); }, onProgress: (p) => { st.progress = p; if (Date.now() - last > 600) { last = Date.now(); render(); } } });
+      const dirs = st.results.filter((r) => r.dir).slice(0, 400).map((r) => r.path);
+      if (dirs.length) { const { sizes } = await api('POST', 'sizes', null, { paths: dirs }); st.results.forEach((r) => { if (sizes[r.path] != null) r.size = sizes[r.path]; }); }
+    } catch (e) { showError(e); }
+    st.running = false;
+    if (S.page === 'fileSearch') pageSearch();
+  }
+  rerender = render; render();
+}
+
+/* ============================================================ LIPO */
+async function lipoApps(paths, prune) {
+  const ok = await confirmDlg(`Lipo ${plural(paths.length, 'app')}?`, `Pearfin removes the ${S.nativeArch === 'arm' ? 'Intel' : 'Apple silicon'} code from ${paths.length === 1 ? 'this app' : 'these apps'}, keeping only what this Mac runs. Each part keeps its own signature, so the apps still open. Their next update puts the full version back.`, 'Lipo', false);
+  if (!ok) return false;
+  try {
+    const { task } = await api('POST', 'lipo/thin', null, { paths, prune: !!prune });
+    setStatus('Slimming apps…');
+    const t = await follow(task, { onProgress: (p) => p && p.total && setStatus(`Slimming ${p.step || ''} (${p.done + 1} of ${p.total})…`) });
+    const r = t.result || {};
+    toast(r.failed && r.failed.length ? `Saved ${fmtSize(r.saved)}; ${r.failed.length} couldn't be slimmed: ${r.failed[0].error}` : `Saved ${fmtSize(r.saved)}`, r.failed && r.failed.length > 0);
+    S.apps = null; refreshDisk();
+    return true;
+  } catch (e) { showError(e); return false; }
+}
+function pageLipo() {
+  const st = S.cache.lipo || (S.cache.lipo = { items: null, checked: new Set(), running: false, prune: false });
+  toolbar({ title: 'Lipo', placeholder: 'Filter apps', actions: `<button class="tb label" id="tb-scan">${st.running ? I.stop + ' Stop' : I.refresh + (st.items ? ' Scan Again' : ' Scan')}</button>` });
+  $('#tb-scan').onclick = () => st.running ? api('POST', 'task/stop', null, { id: st.task }) : scan();
+  const c = content();
+  const visible = () => (st.items || []).filter((x) => matches(S.filter, x.name)).sort((a, b) => b.savings - a.savings);
+  const other = S.nativeArch === 'arm' ? 'Intel' : 'Apple silicon';
+  const render = () => {
+    if (S.page !== 'lipo') return;
+    const intel = (S.apps || []).filter((a) => a.arch === 'intel' && S.nativeArch === 'arm');
+    if (!st.items && !st.running) {
+      c.innerHTML = emptyBox(I.lipo, 'Slim down universal apps', `Universal apps carry code for both Apple silicon and Intel Macs. Lipo removes the ${other} part to save space, without Xcode.${S.st && S.st.macosMajor >= 27 ? ' macOS 27 Golden Gate runs only on Apple silicon, so Intel code is never used.' : ''}`, '<button class="btn primary" id="eb-scan" style="margin-top:6px">Scan Apps</button>');
+      $('#eb-scan').onclick = scan; setStatus(''); return;
+    }
+    const items = visible();
+    const sel = (st.items || []).filter((x) => st.checked.has(x.path));
+    const p = st.progress || {};
+    c.innerHTML = `<section class="files" tabindex="0" style="--cols:30px minmax(240px,1fr) 110px 110px">
+      ${S.st && S.st.macosMajor >= 27 ? `<div class="banner info" style="margin-top:12px">${I.info}<div class="grow">On macOS 27 Golden Gate every Mac is Apple silicon, so the Intel half of a universal app is dead weight.</div></div>` : ''}
+      ${st.running ? `<div class="subbar"><span class="spin"></span> Checking ${p.total ? `${p.done} of ${p.total}` : ''} universal apps…</div>` : ''}
+      ${items.length ? `<div class="list-head"><div></div><div>App</div><div class="r">App Size</div><div class="r">Lipo Saves</div></div>` + items.map((x, i) => `<div class="row${st.checked.has(x.path) ? '' : ' off'}" data-i="${i}" data-path="${esc(x.path)}"><div style="padding-right:0"><input type="checkbox" class="cb" ${st.checked.has(x.path) ? 'checked' : ''}></div>
+        <div class="c-name">${pic(x.path, 20, I.app)}<div class="two"><span class="nm">${esc(x.name)}</span><small>${esc(x.version || '')}${x.system ? '' : ' · in your home folder'}</small></div></div><div class="c-r c-dim">${fmtSize(x.size)}</div><div class="c-r" style="color:var(--ok);font-weight:600">${fmtSize(x.savings)}</div></div>`).join('')
+        : st.running ? '' : `<div class="hint" style="padding:16px 10px">No universal apps to slim down.</div>`}
+      ${intel.length ? `<div class="grp" style="margin-top:12px">Intel-only apps<span class="r">${plural(intel.length, 'app')}</span></div><div class="hint" style="padding:0 10px 6px">These run through Rosetta${S.st && S.st.macosMajor >= 27 ? ", which Apple is phasing out after macOS 27. Look for Apple silicon versions" : ''}.</div>` + intel.map((a) => `<div class="row" style="grid-template-columns:minmax(0,1fr) 110px"><div class="c-name">${pic(a.container || a.path, 20, I.app)}<span class="nm">${esc(a.name)}</span></div><div class="c-r c-dim">${fmtSize(a.size)}</div></div>`).join('') : ''}
+    </section>
+    <div class="actionbar"><label class="check" style="margin-right:auto"><input type="checkbox" id="l-prune" ${st.prune ? 'checked' : ''}> Also remove unused translations</label>
+      <div class="info" style="flex:none"><b>${plural(sel.length, 'app')}</b> · saves ${fmtSize(sel.reduce((n, x) => n + x.savings, 0))}</div>
+      <button class="btn primary" id="l-go" ${sel.length && !st.running ? '' : 'disabled'}>Lipo ${sel.length ? plural(sel.length, 'App') : ''}</button></div>`;
+    setStatus(st.items ? `${plural(st.items.length, 'universal app')} can be slimmed` : '', st.items ? `Up to ${fmtSize(st.items.reduce((n, x) => n + x.savings, 0))}` : '');
+    $$('.row[data-path]', c).forEach((r) => r.onclick = () => { const p = r.dataset.path; st.checked.has(p) ? st.checked.delete(p) : st.checked.add(p); render(); });
+    $('#l-prune').onchange = (e) => { st.prune = e.target.checked; };
+    $('#l-go').onclick = async () => { if (await lipoApps(sel.map((x) => x.path), st.prune)) { st.items = st.items.filter((x) => !st.checked.has(x.path)); st.checked.clear(); render(); } };
+  };
+  async function scan() {
+    st.running = true; st.items = []; st.checked.clear(); st.progress = null;
+    if (!S.apps) await loadApps(false);
+    pageLipo();
+    try {
+      const id = (await api('GET', 'lipo/scan')).task;
+      st.task = id;
+      await follow(id, { onItems: (items) => { items.forEach((x) => { st.items.push(x); st.checked.add(x.path); }); render(); }, onProgress: (p) => { st.progress = p; } });
+    } catch (e) { showError(e); }
+    st.running = false;
+    if (S.page === 'lipo') pageLipo();
+  }
+  rerender = render; render();
+  if (!S.apps) loadApps(false).then(render);
+}
+
+/* ============================================================ UPDATER */
+function pageUpdater() {
+  const st = S.cache.updater || (S.cache.updater = { items: null, running: false, lines: [], busy: {} });
+  toolbar({ title: 'Updater', placeholder: 'Filter', actions: `<button class="tb label" id="tb-check">${st.running ? '<span class="spin"></span> Checking…' : I.refresh + ' Check for Updates'}</button>` });
+  $('#tb-check').onclick = () => !st.running && check();
+  const c = content();
+  const SRC = { sparkle: ['Sparkle', 'Updates from the developer'], appstore: ['App Store', 'Opens in the App Store'], homebrew: ['Homebrew', 'Upgraded with brew'] };
+  const render = () => {
+    if (S.page !== 'updater') return;
+    if (!st.items) {
+      c.innerHTML = st.running ? loadingBox(st.step || 'Checking for updates…') : emptyBox(I.upd, 'Check for app updates', 'Pearfin checks Sparkle update feeds, the Mac App Store and Homebrew for newer versions of your apps.', '<button class="btn primary" id="eb-check" style="margin-top:6px">Check for Updates</button>');
+      const b = $('#eb-check'); if (b) b.onclick = check; setStatus(''); return;
+    }
+    const items = st.items.filter((u) => matches(S.filter, u.name));
+    const groups = ['sparkle', 'appstore', 'homebrew'].map((k) => [k, items.filter((u) => u.source === k)]).filter(([, v]) => v.length);
+    c.innerHTML = `<section class="files" tabindex="0" style="--cols:minmax(240px,1fr) 190px auto">
+      ${!items.length ? emptyBox(I.check, 'Everything is up to date', st.checked ? 'Checked ' + fmtDate(st.checked) : '') : groups.map(([k, arr]) => `<div class="grp">${SRC[k][0]}<span class="r">${esc(SRC[k][1])}</span></div>` + arr.map((u, i) => {
+        const id = k + ':' + (u.path || u.token); const busy = st.busy[id];
+        return `<div class="row tall" data-id="${esc(id)}"><div class="c-name">${u.path ? pic(u.path, 28, I.app, 'aic lg') : `<span class="aic lg">${I.brew}</span>`}<div class="two"><span class="nm">${esc(u.name)}</span><small>${esc(u.kind === 'formula' ? 'Formula' : u.bundleId || u.token || '')}</small></div></div>
+          <div class="c-dim">${esc(u.current || '?')} → <b style="color:var(--text)">${esc(u.latest || '?')}</b></div>
+          <div style="display:flex;gap:6px;justify-content:flex-end">${u.notes || u.notesLink ? '<button class="btn sm" data-notes>Notes</button>' : ''}<button class="btn sm" data-ignore title="Don't show updates for this app">Skip</button><button class="btn sm primary" data-up ${busy ? 'disabled' : ''}>${busy ? '<span class="spin"></span>' : k === 'appstore' ? 'App Store' : 'Update'}</button></div></div>`;
+      }).join('')).join('')}
+      <pre class="term" id="u-term">${esc(st.lines.join('\n'))}</pre></section>`;
+    setStatus(`${plural(items.length, 'update')} available`, st.checked ? 'Checked ' + fmtDate(st.checked) : '');
+    const find = (el) => { const id = el.closest('[data-id]').dataset.id; return [id, st.items.find((u) => u.source + ':' + (u.path || u.token) === id)]; };
+    $$('[data-up]', c).forEach((b) => b.onclick = () => { const [id, u] = find(b); update(id, u); });
+    $$('[data-ignore]', c).forEach((b) => b.onclick = async () => { const [, u] = find(b); const ign = [...(S.settings.updaterIgnored || []), u.bundleId || u.token]; const r = await api('POST', 'settings', null, { updaterIgnored: ign }); S.settings = r.settings; st.items = st.items.filter((x) => x !== u); render(); toast(`Skipping updates for ${u.name}. Undo in Settings → General.`); });
+    $$('[data-notes]', c).forEach((b) => b.onclick = () => { const [, u] = find(b);
+      modal({ title: `${u.name} ${u.latest}`, wide: true, html: u.notes ? `<div class="notes">${sanitize(u.notes)}</div>` : `<p>Release notes are at <span class="mono">${esc(u.notesLink)}</span></p>`, buttons: [u.notesLink ? { label: 'Open in Browser', value: 'open', left: true } : null, { label: 'Close', value: true, primary: true }].filter(Boolean) })
+        .then((r) => { if (r && r.value === 'open') api('POST', 'openurl', null, { url: u.notesLink }); }); });
+  };
+  async function update(id, u) {
+    if (u.source === 'appstore') return api('POST', 'openurl', null, { url: u.url });
+    st.busy[id] = true; render();
+    try {
+      const { task } = u.source === 'homebrew' ? await api('POST', 'brew/action', null, { action: 'upgrade', names: [u.token], cask: u.kind === 'cask' })
+        : await api('POST', 'updater/install', null, { path: u.path });
+      const t = await follow(task, { onLines: (l) => { st.lines.push(...l); const term = $('#u-term'); if (term) { term.textContent = st.lines.join('\n'); term.scrollTop = term.scrollHeight; } } });
+      toast(t.result && t.result.message ? t.result.message : `${u.name} updated`);
+      st.items = st.items.filter((x) => x !== u); S.apps = null;
+    } catch (e) { showError(e); }
+    delete st.busy[id]; render(); renderSidebar();
+  }
+  async function check() {
+    st.running = true; st.items = null; st.lines = []; render(); pageUpdater();
+    try {
+      const { task } = await api('POST', 'updater/check');
+      const t = await follow(task, { onProgress: (p) => { if (p && p.step && p.step !== st.step) { st.step = 'Checking ' + p.step + '…'; render(); } } });
+      st.items = t.result.updates; st.checked = t.result.checked; S.cache.updates = st.items;
+    } catch (e) { showError(e); }
+    st.running = false; st.step = null;
+    if (S.page === 'updater') pageUpdater(); renderSidebar();
+  }
+  rerender = render; render();
+}
+/** Release notes are HTML from the developer: keep text formatting only. */
+function sanitize(html) {
+  const doc = new DOMParser().parseFromString(String(html), 'text/html');
+  const ok = new Set(['P', 'UL', 'OL', 'LI', 'B', 'STRONG', 'I', 'EM', 'H1', 'H2', 'H3', 'H4', 'BR', 'CODE', 'PRE', 'BLOCKQUOTE', 'SPAN', 'DIV']);
+  const walk = (n) => [...n.childNodes].map((c) => c.nodeType === 3 ? esc(c.textContent) : c.nodeType === 1 ? (ok.has(c.tagName) ? `<${c.tagName.toLowerCase()}>${walk(c)}</${c.tagName.toLowerCase()}>` : walk(c)) : '').join('');
+  return walk(doc.body);
+}
+
+/* ============================================================ HOMEBREW */
+function pageBrew() {
+  const st = S.cache.brew || (S.cache.brew = { tab: 'installed', installed: null, outdated: null, search: null, q: '', taps: null, lines: [], running: false });
+  toolbar({ title: 'Homebrew', search: st.tab === 'installed', placeholder: 'Filter',
+    actions: `<div class="seg text" id="b-tabs">${[['installed', 'Installed'], ['search', 'Search'], ['outdated', 'Updates'], ['maint', 'Maintenance'], ['taps', 'Taps']].map(([k, l]) => `<button data-t="${k}" class="${st.tab === k ? 'on' : ''}">${l}</button>`).join('')}</div>
+      <button class="tb" id="tb-refresh" title="Refresh">${I.refresh}</button>` });
+  $$('#b-tabs button').forEach((b) => b.onclick = () => { st.tab = b.dataset.t; S.filter = ''; pageBrew(); });
+  $('#tb-refresh').onclick = () => { st.installed = st.outdated = st.taps = null; pageBrew(); };
+  const c = content();
+  if (S.st && !S.st.brew) {
+    c.innerHTML = emptyBox(I.brew, 'Homebrew isn’t installed', 'Homebrew installs command-line tools and apps. Install it from brew.sh, then come back.', '<button class="btn primary" id="eb-brew" style="margin-top:6px">Open brew.sh</button>');
+    $('#eb-brew').onclick = () => api('POST', 'openurl', null, { url: 'https://brew.sh' }); setStatus(''); return;
+  }
+  const term = () => `<pre class="term" id="b-term">${esc(st.lines.slice(-400).join('\n'))}</pre>`;
+  const pushLines = (l) => { st.lines.push(...l); const t = $('#b-term'); if (t) { t.textContent = st.lines.slice(-400).join('\n'); t.scrollTop = t.scrollHeight; } };
+  async function act(action, names, cask, opts = {}) {
+    if (st.running) return toast('Homebrew is busy. Wait for the current task to finish.', true);
+    if (opts.confirm) { const ok = await confirmDlg(opts.confirm, opts.message || '', opts.label || 'Continue', !!opts.danger); if (!ok) return; }
+    st.running = true; st.lines.push(''); render();
+    try {
+      const { task } = await api('POST', 'brew/action', null, { action, names, cask, zap: !!opts.zap });
+      await follow(task, { onLines: pushLines });
+      toast(opts.done || 'Done');
+      if (['install', 'uninstall', 'upgrade', 'tap', 'untap', 'autoremove'].includes(action)) { st.installed = st.outdated = st.taps = null; S.apps = null; }
+    } catch (e) { showError(e); }
+    st.running = false; render();
+  }
+  const pkgRow = (p, actions) => `<div class="row tall" data-name="${esc(p.name)}" data-cask="${p.kind === 'cask' ? 1 : 0}"><div class="c-name"><span class="aic lg">${p.kind === 'cask' ? fa('window-maximize', 16, 'var(--sb-music)') : fa('terminal', 14, 'var(--sb-tv)')}</span><div class="two"><span class="nm">${esc(p.name)}${p.title && p.title !== p.name ? ` <span class="c-dim">${esc(p.title)}</span>` : ''}</span><small>${esc(p.desc || '')}</small></div></div>
+    <div class="c-dim">${esc(p.version || '')}${p.outdated ? ` → <b style="color:var(--text)">${esc(p.latest)}</b>` : ''}</div><div><span class="bdgs">${p.outdated ? '<i class="bdg orange">Update</i>' : ''}${p.pinned ? '<i class="bdg">Pinned</i>' : ''}${p.dependency && !p.onRequest ? '<i class="bdg">Dependency</i>' : ''}</span></div>
+    <div style="display:flex;gap:6px;justify-content:flex-end">${actions}</div></div>`;
+  const render = () => {
+    if (S.page !== 'homebrew') return;
+    const cols = 'style="--cols:minmax(240px,1fr) 170px auto auto"';
+    if (st.tab === 'installed') {
+      if (!st.installed) { c.innerHTML = loadingBox('Asking Homebrew what’s installed…'); api('GET', 'brew/installed').then((r) => { st.installed = r; render(); }).catch((e) => { st.installed = { formulae: [], casks: [], error: e.message }; render(); }); return; }
+      const f = st.installed.formulae.filter((p) => matches(S.filter, p.name, p.desc)), k = st.installed.casks.filter((p) => matches(S.filter, p.name, p.desc, p.title));
+      const btns = (p) => `${p.outdated ? '<button class="btn sm" data-a="upgrade">Upgrade</button>' : ''}<button class="btn sm" data-a="more">${I.dots}</button>`;
+      c.innerHTML = `<section class="files" tabindex="0" ${cols}>${st.installed.error ? `<div class="banner">${I.warn}<div class="grow">${esc(st.installed.error)}</div></div>` : ''}
+        <div class="grp">Formulae<span class="r">${f.length}</span></div>${f.map((p) => pkgRow(p, btns(p))).join('')}
+        <div class="grp">Casks<span class="r">${k.length}</span></div>${k.map((p) => pkgRow(p, btns(p))).join('')}</section>${term()}`;
+      setStatus(`${plural(st.installed.formulae.length, 'formula')}, ${plural(st.installed.casks.length, 'cask')}`, st.running ? 'Working…' : '');
+    } else if (st.tab === 'search') {
+      c.innerHTML = `<div class="fbuilder"><form class="frow" id="b-sf"><input class="field sm grow" id="b-q" placeholder="Search formulae and casks" value="${esc(st.q)}" spellcheck="false"><button class="btn sm primary" type="submit">Search</button></form></div>
+        <section class="files" tabindex="0" ${cols}>${st.search === 'loading' ? loadingBox('Searching…') : !st.search ? emptyBox(I.brew, 'Search Homebrew', 'Find command-line tools (formulae) and apps (casks) to install.') :
+          ['formulae', 'casks'].map((kind) => `<div class="grp">${kind === 'casks' ? 'Casks' : 'Formulae'}<span class="r">${st.search[kind].length}</span></div>` + st.search[kind].map((n) => pkgRow({ name: n, kind: kind === 'casks' ? 'cask' : 'formula' }, '<button class="btn sm" data-a="info">Info</button><button class="btn sm primary" data-a="install">Install</button>')).join('')).join('')}</section>${term()}`;
+      $('#b-sf').onsubmit = async (e) => { e.preventDefault(); st.q = $('#b-q').value.trim(); if (!st.q) return; st.search = 'loading'; render(); try { st.search = await api('GET', 'brew/search', { q: st.q }); } catch (err) { showError(err); st.search = null; } render(); };
+      setStatus('');
+    } else if (st.tab === 'outdated') {
+      if (!st.outdated) { c.innerHTML = loadingBox('Checking for updates…'); api('GET', 'brew/outdated').then((r) => { st.outdated = r.items; render(); }).catch((e) => { showError(e); st.outdated = []; render(); }); return; }
+      c.innerHTML = `<section class="files" tabindex="0" ${cols}>${st.outdated.length ? `<div class="subbar"><span class="grow">${plural(st.outdated.length, 'update')} available</span><button class="btn sm primary" id="b-all">Upgrade All</button></div>` + st.outdated.map((p) => pkgRow({ ...p, outdated: true }, '<button class="btn sm primary" data-a="upgrade">Upgrade</button>')).join('') : emptyBox(I.check, 'Everything is up to date', 'Run Maintenance → Update Homebrew to fetch the newest package list.')}</section>${term()}`;
+      const all = $('#b-all'); if (all) all.onclick = () => act('upgrade', [], false, { done: 'Upgraded everything' });
+      setStatus('');
+    } else if (st.tab === 'maint') {
+      const card = (a, icon, t, d) => `<div class="card"><h4>${fa(icon, 13)}${esc(t)}</h4><p>${esc(d)}</p><button class="btn sm" data-m="${a}" ${st.running ? 'disabled' : ''}>Run</button></div>`;
+      c.innerHTML = `<section class="files" tabindex="0"><div class="cards">
+        ${card('update', 'arrows-rotate', 'Update Homebrew', 'Fetch the newest version of Homebrew and its package lists.')}
+        ${card('cleanup', 'broom', 'Clean Up', 'Remove old versions and cached downloads (brew cleanup --prune=all).')}
+        ${card('autoremove', 'link-slash', 'Remove Unused Dependencies', 'Uninstall formulae that were only installed for something you removed.')}
+        ${card('doctor', 'stethoscope', 'Doctor', 'Check your Homebrew setup for problems.')}</div>${term()}</section>`;
+      $$('[data-m]', c).forEach((b) => b.onclick = () => act(b.dataset.m, [], false, { done: b.closest('.card').querySelector('h4').textContent + ' finished' }));
+      setStatus(st.running ? 'Working…' : '');
+    } else if (st.tab === 'taps') {
+      if (!st.taps) { c.innerHTML = loadingBox('Loading taps…'); api('GET', 'brew/taps').then((r) => { st.taps = r.taps; render(); }).catch((e) => { showError(e); st.taps = []; render(); }); return; }
+      c.innerHTML = `<div class="fbuilder"><form class="frow" id="b-tf"><input class="field sm grow" id="b-tap" placeholder="user/repo" spellcheck="false"><button class="btn sm primary" type="submit">Add Tap</button></form></div>
+        <section class="files" tabindex="0" style="--cols:minmax(0,1fr) auto">${st.taps.map((t) => `<div class="row" data-tap="${esc(t)}"><div class="c-name">${fa('code-branch', 13, 'var(--text3)')}<span class="nm">${esc(t)}</span></div><div>${['homebrew/core', 'homebrew/cask'].includes(t) ? '' : '<button class="btn sm" data-untap>Remove</button>'}</div></div>`).join('')}</section>${term()}`;
+      $('#b-tf').onsubmit = (e) => { e.preventDefault(); const v = $('#b-tap').value.trim(); if (v) act('tap', [v], false, { done: `Tapped ${v}` }); };
+      $$('[data-untap]', c).forEach((b) => b.onclick = () => { const t = b.closest('[data-tap]').dataset.tap; act('untap', [t], false, { confirm: `Remove the tap ${t}?`, label: 'Remove', danger: true, done: `Removed ${t}` }); });
+      setStatus(`${plural(st.taps.length, 'tap')}`);
+    }
+    $$('[data-a]', c).forEach((b) => b.onclick = async (e) => {
+      const row = b.closest('[data-name]'); const name = row.dataset.name; const cask = row.dataset.cask === '1'; const a = b.dataset.a;
+      const p = st.installed && [...st.installed.formulae, ...st.installed.casks].find((x) => x.name === name && (x.kind === 'cask') === cask);
+      if (a === 'upgrade') return act('upgrade', [name], cask, { done: `Upgraded ${name}` });
+      if (a === 'install') return act('install', [name], cask, { done: `Installed ${name}` });
+      if (a === 'info') return brewInfo(name, cask, act);
+      if (a === 'more') showMenu([
+        { label: 'Info…', action: () => brewInfo(name, cask, act) },
+        p && p.homepage ? { label: 'Homepage', action: () => api('POST', 'openurl', null, { url: p.homepage }) } : null,
+        p && !cask ? { label: p.pinned ? 'Unpin' : 'Pin', action: () => act(p.pinned ? 'unpin' : 'pin', [name], false, { done: p.pinned ? 'Unpinned' : 'Pinned' }) } : null,
+        { label: 'Reinstall', action: () => act('reinstall', [name], cask, { done: `Reinstalled ${name}` }) },
+        '-',
+        { label: 'Uninstall…', danger: true, action: () => act('uninstall', [name], cask, { confirm: `Uninstall ${name}?`, label: 'Uninstall', danger: true, done: `Uninstalled ${name}` }) },
+        cask ? { label: 'Uninstall and Zap…', danger: true, action: () => act('uninstall', [name], true, { zap: true, confirm: `Uninstall ${name} and zap its files?`, message: 'Zap also removes the settings and caches the cask lists. Shared files can be affected.', label: 'Zap', danger: true, done: `Zapped ${name}` }) } : null,
+      ], 0, 0, b);
+    });
+  };
+  rerender = render; render();
+}
+async function brewInfo(name, cask, act) {
+  let i;
+  try { i = await api('GET', 'brew/info', { name, cask: cask ? 1 : 0 }); } catch (e) { return showError(e); }
+  const kv = [['Name', cask ? (i.name || [])[0] || i.token : i.name], ['Version', cask ? i.version : i.versions && i.versions.stable], ['Description', i.desc], ['Homepage', i.homepage], ['Tap', i.tap], ['License', i.license],
+    ['Dependencies', !cask && i.dependencies && i.dependencies.length ? i.dependencies.join(', ') : null], ['Installed', cask ? i.installed : i.installed && i.installed.length ? i.installed.map((x) => x.version).join(', ') : null]].filter(([, v]) => v);
+  const installed = cask ? !!i.installed : !!(i.installed && i.installed.length);
+  const r = await modal({ title: name, wide: true, html: `<dl class="kv">${kv.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('')}</dl>`,
+    buttons: [i.homepage ? { label: 'Homepage', value: 'home', left: true } : null, { label: 'Close', value: null }, installed ? null : { label: 'Install', value: 'install', primary: true }].filter(Boolean) });
+  if (r && r.value === 'home') api('POST', 'openurl', null, { url: i.homepage });
+  if (r && r.value === 'install') act('install', [name], cask, { done: `Installed ${name}` });
+}
+
+/* ============================================================ PACKAGES */
+function pagePackages() {
+  const st = S.cache.pkgs || (S.cache.pkgs = { list: null, hideApple: true });
+  toolbar({ title: 'Packages', placeholder: 'Filter packages', actions: `<button class="tb ${st.hideApple ? 'on' : ''}" id="tb-apple" title="Hide Apple packages">${fa('apple-whole', 13)}</button><button class="tb" id="tb-refresh" title="Refresh">${I.refresh}</button>` });
+  $('#tb-apple').onclick = () => { st.hideApple = !st.hideApple; pagePackages(); };
+  $('#tb-refresh').onclick = () => { st.list = null; pagePackages(); };
+  const c = content();
+  const render = () => {
+    if (S.page !== 'packages') return;
+    if (!st.list) { c.innerHTML = loadingBox('Reading installer receipts…'); return; }
+    const items = st.list.filter((p) => (!st.hideApple || !p.apple) && matches(S.filter, p.id));
+    c.innerHTML = `<section class="files" tabindex="0" style="--cols:minmax(240px,1fr) 120px 140px auto">
+      <div class="list-head"><div>Package</div><div>Version</div><div>Installed</div><div></div></div>
+      ${items.length ? items.map((p) => `<div class="row" data-id="${esc(p.id)}"><div class="c-name">${fa('box', 14, 'var(--sb-books)')}<div class="two"><span class="nm">${esc(p.id)}</span><small>${esc(p.location ? 'Installed into ' + (p.location.startsWith('/') ? p.location : '/' + p.location) : 'Installed into /')}</small></div></div>
+        <div class="c-dim">${esc(p.version)}</div><div class="c-dim">${fmtDate(p.installed)}</div><div><span class="bdgs">${p.secure ? '' : '<i class="bdg orange">Unsigned</i>'}</span></div></div>`).join('') : emptyBox(I.pkg, 'No packages', st.hideApple ? 'Only Apple packages are installed. Click the Apple button to show them.' : 'No installer packages found.')}</section>`;
+    setStatus(`${plural(items.length, 'package')}${st.hideApple ? ' (Apple hidden)' : ''}`);
+    $$('.row[data-id]', c).forEach((r) => r.onclick = () => pkgDetail(st.list.find((p) => p.id === r.dataset.id), () => { st.list = null; pagePackages(); }));
+  };
+  rerender = render; render();
+  if (!st.list) api('GET', 'packages').then((r) => { st.list = r.packages; render(); }).catch((e) => { showError(e); st.list = []; render(); });
+}
+async function pkgDetail(p, reload) {
+  const scrimP = modal({ title: p.id, wide: 'x', html: `<dl class="kv"><dt>Version</dt><dd>${esc(p.version)}</dd><dt>Installed</dt><dd>${fmtDate(p.installed)}</dd><dt>Location</dt><dd>${esc(p.volume)}${esc(p.location)}</dd><dt>Receipts</dt><dd>${p.receipts.map(esc).join('<br>')}</dd></dl><div id="pk-files">${loadingBox('Reading the bill of materials…')}</div>`,
+    buttons: [{ label: 'Forget Package…', value: 'forget', left: true }, { label: 'Close', value: null }, { label: 'Move Files to Trash', value: 'trash', primary: true, danger: true }],
+    onOpen: async (form) => {
+      try {
+        const r = await api('GET', 'package/files', { id: p.id });
+        p._files = r.files; p._checked = new Set(r.files.map((f) => f.path));
+        const draw = () => { $('#pk-files', form).innerHTML = `<p>${r.present} of ${plural(r.total, 'file')} it installed are still here.${r.files.length ? ' These can be removed:' : ' You can forget this package.'}</p>${r.files.length ? `<div class="dlist" id="pk-rows">${fileRows(r.files, p._checked)}</div>` : ''}`;
+          const rows = $('#pk-rows', form); if (rows) wireFileRows(rows, () => r.files, p._checked, draw); };
+        draw();
+      } catch (e) { $('#pk-files', form).innerHTML = `<p class="err">${esc(e.message)}</p>`; }
+    } });
+  const r = await scrimP;
+  if (!r) return;
+  if (r.value === 'trash') {
+    const paths = (p._files || []).filter((f) => p._checked.has(f.path)).map((f) => f.path);
+    if (!paths.length) return toast('Nothing selected');
+    const res = await trashPaths(paths, p.id).catch(showError);
+    if (res && res.moved) { const f = await confirmDlg('Forget the package too?', `Removes the install record for ${p.id}, so it stops showing here. Needs your Mac password.`, 'Forget'); if (f) await forget(); reload(); }
+  } else if (r.value === 'forget') {
+    const f = await confirmDlg(`Forget ${p.id}?`, 'macOS stops tracking this package. Its files stay where they are. Needs your Mac password.', 'Forget', true);
+    if (f) { await forget(); reload(); }
+  }
+  async function forget() { try { await api('POST', 'package/forget', null, { id: p.id }); toast(`Forgot ${p.id}`); } catch (e) { showError(e); } }
+}
+
+/* ============================================================ PLUGINS */
+function pagePlugins() {
+  const st = S.cache.plugins || (S.cache.plugins = { list: null, checked: new Set(), cat: 'All' });
+  toolbar({ title: 'Plugins', placeholder: 'Filter plugins', actions: `<button class="tb" id="tb-refresh" title="Refresh">${I.refresh}</button>` });
+  $('#tb-refresh').onclick = () => { st.list = null; st.checked.clear(); pagePlugins(); };
+  const c = content();
+  const visible = () => (st.list || []).filter((p) => (st.cat === 'All' || p.category === st.cat) && matches(S.filter, p.name, p.bundleId));
+  const render = () => {
+    if (S.page !== 'plugins') return;
+    if (!st.list) { c.innerHTML = loadingBox('Looking for plugins…'); return; }
+    const cats = [...new Set(st.list.map((p) => p.category))];
+    const items = visible();
+    const sel = st.list.filter((p) => st.checked.has(p.path));
+    c.innerHTML = `<section class="files" tabindex="0" style="--cols:30px minmax(240px,1fr) auto 90px">
+      <div class="chips"><button class="chip ${st.cat === 'All' ? 'on' : ''}" data-cat="All">All <small>${st.list.length}</small></button>${cats.map((k) => `<button class="chip ${st.cat === k ? 'on' : ''}" data-cat="${esc(k)}">${esc(k)} <small>${st.list.filter((p) => p.category === k).length}</small></button>`).join('')}</div>
+      ${items.length ? `<div id="p-rows">${fileRows(items, st.checked, { sub: (f) => f.category + ' · ' + parentOf(f.path), badge: (f) => f.system ? '<i class="bdg">All users</i>' : '' })}</div>` : emptyBox(I.plug, 'No plugins found', 'Audio units, Quick Look and Spotlight plugins, screen savers and more show up here.')}</section>
+      <div class="actionbar"><div class="info"><b>${plural(sel.length, 'plugin')}</b> selected · ${fmtSize(sel.reduce((n, p) => n + p.size, 0))}</div><button class="btn danger" id="p-del" ${sel.length ? '' : 'disabled'}>Move to Trash</button></div>`;
+    setStatus(`${plural(st.list.length, 'plugin')}`, fmtSize(st.list.reduce((n, p) => n + p.size, 0)));
+    $$('.chip[data-cat]', c).forEach((b) => b.onclick = () => { st.cat = b.dataset.cat; render(); });
+    const rows = $('#p-rows'); if (rows) wireFileRows(rows, visible, st.checked, render);
+    $('#p-del').onclick = async () => { const paths = sel.map((p) => p.path); const r = await trashPaths(paths, 'Plugins').catch(showError); if (r && r.moved) { st.list = null; st.checked.clear(); pagePlugins(); } };
+  };
+  rerender = render; render();
+  if (!st.list) api('GET', 'plugins').then((r) => { st.list = r.plugins; render(); }).catch((e) => { showError(e); st.list = []; render(); });
+}
+
+/* ============================================================ SERVICES */
+function pageServices() {
+  const st = S.cache.svc || (S.cache.svc = { list: null, kind: 'All', hideApple: true });
+  toolbar({ title: 'Services', placeholder: 'Filter services', actions: `<button class="tb ${st.hideApple ? 'on' : ''}" id="tb-apple" title="Hide Apple services">${fa('apple-whole', 13)}</button><button class="tb" id="tb-refresh" title="Refresh">${I.refresh}</button>` });
+  $('#tb-apple').onclick = () => { st.hideApple = !st.hideApple; render(); $('#tb-apple').classList.toggle('on', st.hideApple); };
+  $('#tb-refresh').onclick = () => { st.list = null; pageServices(); };
+  const c = content();
+  const KINDS = ['All', 'User Agent', 'System Agent', 'System Daemon', 'App Service'];
+  const render = () => {
+    if (S.page !== 'services') return;
+    if (!st.list) { c.innerHTML = loadingBox('Reading launch services…'); return; }
+    const items = st.list.filter((s) => (st.kind === 'All' || s.kind === st.kind) && (!st.hideApple || !s.apple) && matches(S.filter, s.label, s.program));
+    const status = (s) => s.pid ? `<i class="bdg green">Running · PID ${s.pid}</i>` : s.loaded ? `<i class="bdg blue">Loaded${s.status && s.status !== '0' ? ' · exit ' + esc(s.status) : ''}</i>` : '<i class="bdg">Not loaded</i>';
+    c.innerHTML = `<section class="files" tabindex="0" style="--cols:minmax(240px,1fr) 120px auto auto">
+      <div class="chips">${KINDS.map((k) => `<button class="chip ${st.kind === k ? 'on' : ''}" data-k="${k}">${k === 'All' ? 'All' : k + 's'} <small>${st.list.filter((s) => (k === 'All' || s.kind === k) && (!st.hideApple || !s.apple)).length}</small></button>`).join('')}</div>
+      ${items.length ? items.map((s) => `<div class="row tall" data-label="${esc(s.label)}"><div class="c-name">${fa(s.system ? 'server' : 'user-gear', 13, 'var(--text3)')}<div class="two"><span class="nm">${esc(s.label)}</span><small>${esc(s.program ? tild(s.program) : s.path ? tild(s.path) : 'Registered by an app')}</small></div></div>
+        <div class="c-dim">${esc(s.kind)}</div><div>${status(s)}${s.disabled ? ' <i class="bdg orange">Disabled</i>' : ''}</div><div><button class="btn sm" data-more>${I.dots}</button></div></div>`).join('') : emptyBox(I.svc, 'No services', 'Try another filter.')}</section>`;
+    setStatus(`${plural(items.length, 'service')}`, `${st.list.filter((s) => s.pid).length} running`);
+    $$('.chip[data-k]', c).forEach((b) => b.onclick = () => { st.kind = b.dataset.k; render(); });
+    $$('[data-more]', c).forEach((b) => b.onclick = () => {
+      const s = st.list.find((x) => x.label === b.closest('[data-label]').dataset.label);
+      const run = async (action, msg) => { try { await api('POST', 'service', null, { action, label: s.label, path: s.path, kind: s.kind }); toast(msg); await sleep(600); st.list = null; pageServices(); } catch (e) { showError(e); } };
+      showMenu([
+        !s.loaded && s.path ? { label: 'Start', action: () => run('start', `Started ${s.label}`) } : null,
+        s.loaded ? { label: 'Restart', action: () => run('restart', `Restarted ${s.label}`) } : null,
+        s.loaded ? { label: 'Stop', action: () => run('stop', `Stopped ${s.label}`) } : null,
+        s.path ? { label: 'Show in Finder', action: () => api('POST', 'reveal', null, { path: s.path }) } : null,
+        s.program ? { label: 'Show Program in Finder', action: () => api('POST', 'reveal', null, { path: s.program }) } : null,
+        s.path ? '-' : null,
+        s.path ? { label: 'Remove…', danger: true, action: async () => {
+          const ok = await confirmDlg(`Remove ${s.label}?`, 'Pearfin stops it and moves its launch file to the Trash, so it no longer starts with your Mac.', 'Remove', true);
+          if (!ok) return;
+          if (s.loaded) { try { await api('POST', 'service', null, { action: 'stop', label: s.label, path: s.path, kind: s.kind }); } catch {} }
+          const r = await trashPaths([s.path], s.label, { noConfirm: true }).catch(showError);
+          if (r && r.moved) { st.list = null; pageServices(); }
+        } } : null,
+      ], 0, 0, b);
+    });
+  };
+  rerender = render; render();
+  if (!st.list) api('GET', 'services').then((r) => { st.list = r.services; render(); }).catch((e) => { showError(e); st.list = []; render(); });
+}
+
+/* ============================================================ dialogs: settings, permissions, history */
+const LEVELS = [
+  ['strict', 'Strict', 'Exact matches only for the app name, bundle ID and entitlements. The most careful choice, recommended as the default.'],
+  ['enhanced', 'Enhanced', 'Everything in Strict, plus partial name matches. May find a few unrelated files in some cases.'],
+  ['deep', 'Deep', 'Everything in Enhanced, plus the developer’s company name and Team ID, Finder comments and files the app created. Finds the most, including files from the developer’s other apps.'],
+];
+async function settingsDlg(tab = 'general') {
+  let cur = { ...S.settings };
+  const st = S.st;
+  const toggle = (k, t, d, on) => `<div class="set-row"><div class="t"><b>${esc(t)}</b><small>${d}</small></div><label class="toggle"><input type="checkbox" data-k="${k}" ${on ? 'checked' : ''}><i></i></label></div>`;
+  const plist = (k, arr, empty) => `<div class="plist" data-list="${k}">${arr.length ? arr.map((p) => `<div class="it"><span title="${esc(p)}">${esc(tild(p))}</span><button type="button" class="icon-btn" data-rm="${esc(p)}">${I.x}</button></div>`).join('') : `<div class="none">${esc(empty)}</div>`}</div>
+    <div class="addrow"><input class="field" data-add="${k}" placeholder="/path/to/folder or ~/path" spellcheck="false"><button type="button" class="btn" data-addbtn="${k}">Add</button></div>`;
+  const body = () => {
+    if (tab === 'general') return `
+      <label class="lbl">Search sensitivity</label>
+      <div class="levels">${LEVELS.map(([k, t, d]) => `<label class="level ${cur.sensitivity === k ? 'on' : ''}"><input type="radio" name="lvl" value="${k}" ${cur.sensitivity === k ? 'checked' : ''}><div><b>${t}</b><small>${esc(d)}</small></div></label>`).join('')}</div>
+      ${cur.sensitivity === 'deep' ? toggle('searchTextContent', 'Search inside files', 'Deep only: also match the app name in Spotlight text content. Slower and finds more.', cur.searchTextContent) : ''}
+      ${toggle('updaterOnLaunch', 'Check for app updates when Pearfin opens', 'Looks up Sparkle feeds, the App Store and Homebrew in the background. The Updater shows the results.', cur.updaterOnLaunch)}
+      ${toggle('confirmDelete', 'Ask before moving to the Trash', 'Show a confirmation before files are moved.', cur.confirmDelete)}
+      ${toggle('brewCleanup', 'Clean up Homebrew records', 'When you uninstall an app installed with Homebrew, also run brew uninstall so brew forgets it.', cur.brewCleanup)}
+      ${toggle('sentinel', 'Sentinel', 'Watch the Trash: when you drag an app there yourself, Pearfin moves its leftover files to the Trash too. Runs in the background using very little memory.', st.sentinel)}
+      ${toggle('cli', 'Terminal command', 'Adds <code>pearfin</code> to /usr/local/bin so you can run <code>pearfin uninstall Foo</code> in Terminal.', st.cli)}
+      ${(cur.updaterIgnored || []).length ? `<div class="set-row"><div class="t"><b>Skipped updates</b><small>${esc(cur.updaterIgnored.join(', '))}</small></div><button type="button" class="btn sm" id="s-unskip">Show Again</button></div>` : ''}`;
+    if (tab === 'interface') return `
+      <div class="set-row"><div class="t"><b>Open to</b><small>The page Pearfin shows when it starts.</small></div><select class="field" id="s-start" style="width:160px;margin:0">${PAGES.map((p) => `<option value="${p.id}" ${cur.startupPage === p.id ? 'selected' : ''}>${p.title}</option>`).join('')}</select></div>
+      ${toggle('showBadges', 'Badges in the app list', 'Show iOS, Web, Homebrew and Intel labels next to app names.', cur.showBadges)}
+      <label class="lbl" style="margin-top:14px">Sidebar</label>
+      <div class="plist" style="max-height:none">${PAGES.map((p) => `<label class="it"><input type="checkbox" class="cb" data-page="${p.id}" ${(cur.hiddenPages || []).includes(p.id) ? '' : 'checked'} ${p.id === 'apps' ? 'disabled' : ''}><span>${p.title}</span></label>`).join('')}</div>`;
+    if (tab === 'folders') return `
+      <label class="lbl">Where Pearfin looks for apps</label>${plist('appFolders', cur.appFolders || [], 'No folders')}
+      <label class="lbl" style="margin-top:16px">Never remove when uninstalling apps</label>${plist('excludeApps', cur.excludeApps || [], 'Nothing excluded')}
+      <label class="lbl" style="margin-top:16px">Never list as orphaned</label>${plist('excludeOrphans', cur.excludeOrphans || [], 'Nothing excluded')}
+      <label class="lbl" style="margin-top:16px">Files linked to apps</label>
+      <div class="plist">${Object.entries(cur.associations || {}).flatMap(([a, ps]) => ps.map((p) => `<div class="it"><span title="${esc(p)}"><b>${esc(appName(a))}</b> · ${esc(tild(p))}</span><button type="button" class="icon-btn" data-unlink="${esc(a)}" data-p="${esc(p)}">${I.x}</button></div>`)).join('') || '<div class="none">Link orphaned files to an app from the Orphans page.</div>'}</div>`;
+    return `<div style="display:flex;gap:14px;align-items:center;margin-bottom:14px"><img src="/icon.svg" style="width:56px;height:56px" alt=""><div><b style="font-size:16px">Pearfin</b><div class="hint">Version ${esc(st.version)}${st.commit ? ' (' + esc(st.commit) + ')' : ''}${st.macos ? ' · macOS ' + esc(st.macos) + (st.macosName ? ' ' + esc(st.macosName) : '') : ''}</div></div></div>
+      <p class="hint">Uninstall apps together with everything they leave behind, find orphaned files, and tidy up developer caches. Written in Rust, using the Mac's built-in WebKit for the interface.</p>
+      <p class="hint">Pearfin is a Rust rebuild of <b>Pearcleaner</b> by alienator88 (github.com/alienator88/Pearcleaner), updated for macOS 27 Golden Gate. Pearcleaner is licensed under Apache 2.0 with the Commons Clause, so Pearfin is too: free to use and change, never to be sold. It isn't affiliated with or endorsed by the Pearcleaner author.</p>
+      <p class="hint">Icons: Font Awesome Free (CC BY 4.0, SIL OFL 1.1).</p>
+      <p class="hint">Settings are stored in ~/Library/Application Support/Pearfin.</p>`;
+  };
+  const html = `<div class="seg text set-tabs" id="s-tabs">${[['general', 'General'], ['interface', 'Interface'], ['folders', 'Folders'], ['about', 'About']].map(([k, l]) => `<button type="button" data-t="${k}" class="${tab === k ? 'on' : ''}">${l}</button>`).join('')}</div><div id="s-body"></div>`;
+  await modal({ title: 'Settings', html, wide: true, buttons: [{ label: 'Done', value: true, primary: true }], onOpen: (form) => {
+    const save = async (patch) => { try { const r = await api('POST', 'settings', null, patch); S.settings = r.settings; cur = { ...r.settings }; } catch (e) { showError(e); } };
+    const draw = () => {
+      $('#s-body', form).innerHTML = body();
+      $$('#s-tabs button', form).forEach((b) => b.classList.toggle('on', b.dataset.t === tab));
+      $$('input[name=lvl]', form).forEach((r) => r.onchange = async () => {
+        if (r.value === 'deep' && !LS.get('deepWarned', false)) {
+          const ok = await confirmDlg('Use Deep search?', 'Deep finds files by company name and Team ID too, which can include files from the developer’s other apps. Review the list carefully before removing anything.', 'Use Deep');
+          if (!ok) return draw(); LS.set('deepWarned', true);
+        }
+        await save({ sensitivity: r.value }); draw();
+      });
+      $$('input[data-k]', form).forEach((i) => i.onchange = async () => {
+        const k = i.dataset.k;
+        if (k === 'cli') { try { const r = await api('POST', 'cli', null, { install: i.checked }); S.st.cli = r.installed; } catch (e) { showError(e); } return draw(); }
+        if (k === 'sentinel') { await save({ sentinel: i.checked }); await refreshDisk(); return draw(); }
+        await save({ [k]: i.checked }); draw();
+      });
+      const start = $('#s-start', form); if (start) start.onchange = () => save({ startupPage: start.value });
+      $$('input[data-page]', form).forEach((i) => i.onchange = async () => { const hidden = PAGES.filter((p) => !form.querySelector(`input[data-page=${p.id}]`).checked).map((p) => p.id); await save({ hiddenPages: hidden }); renderSidebar(); });
+      $$('[data-rm]', form).forEach((b) => b.onclick = async () => { const k = b.closest('[data-list]').dataset.list; await save({ [k]: cur[k].filter((x) => x !== b.dataset.rm) }); if (k === 'appFolders') S.apps = null; draw(); });
+      $$('[data-addbtn]', form).forEach((b) => b.onclick = async () => { const k = b.dataset.addbtn; const v = form.querySelector(`[data-add=${k}]`).value.trim(); if (!v) return; const p = v.startsWith('~') ? HOME + v.slice(1) : v; if (!(cur[k] || []).includes(p)) await save({ [k]: [...(cur[k] || []), p] }); if (k === 'appFolders') S.apps = null; draw(); });
+      $$('[data-add]', form).forEach((i) => i.onkeydown = (e) => { if (e.key === 'Enter') { e.preventDefault(); form.querySelector(`[data-addbtn=${i.dataset.add}]`).click(); } });
+      $$('[data-unlink]', form).forEach((b) => b.onclick = async () => { await api('POST', 'link', null, { app: b.dataset.unlink, paths: [b.dataset.p], unlink: true }); await refreshDisk(); cur = { ...S.settings }; draw(); });
+      const un = $('#s-unskip', form); if (un) un.onclick = async () => { await save({ updaterIgnored: [] }); draw(); };
+    };
+    $$('#s-tabs button', form).forEach((b) => b.onclick = () => { tab = b.dataset.t; draw(); });
+    draw();
+  } });
+  if (S.page === 'apps' && !S.detail) go('apps');
+  renderSidebar();
+}
+
+async function permissionsDlg() {
+  let p;
+  try { p = await api('GET', 'permissions'); } catch (e) { return showError(e); }
+  S.st.fullDiskAccess = p.fullDiskAccess; renderPermDot();
+  const gg = p.macosMajor >= 27;
+  const status = p.fullDiskAccess === true ? '<i class="bdg green">On</i>' : p.fullDiskAccess === false ? '<i class="bdg orange">Off</i>' : '<i class="bdg">Unknown</i>';
+  const html = `<div class="set-row"><div class="t"><b>Full Disk Access ${status}</b><small>Lets Pearfin look in every Library folder, including other apps’ containers.${gg ? ' On macOS 27 Golden Gate, apps can’t read other apps’ data at all without it.' : ''}</small></div><button type="button" class="btn sm" data-open="fda">Open Settings</button></div>
+    <div class="set-row"><div class="t"><b>App Management</b><small>Lets Pearfin move other apps to the Trash and slim them with Lipo. macOS asks the first time; if it was denied, turn it on here.</small></div><button type="button" class="btn sm" data-open="appManagement">Open Settings</button></div>
+    <div class="set-row"><div class="t"><b>Administrator password</b><small>Files owned by the system (in /Library) are moved with the standard macOS password prompt. Pearfin never sees your password.</small></div></div>
+    <p class="hint" style="margin-top:10px">In System Settings, click <b>+</b> and choose Pearfin in Applications, then switch it on. After each Pearfin update you may need to turn it off and on again, because the GitHub build isn't signed with an Apple developer certificate.</p>`;
+  const r = await modal({ title: 'Permissions', html, wide: true, icon: `<img src="/icon.svg" alt="">`, buttons: [{ label: 'Check Again', value: 'again', left: true }, { label: 'Done', value: true, primary: true }],
+    onOpen: (form) => $$('[data-open]', form).forEach((b) => b.onclick = () => api('POST', 'permissions/open', null, { which: b.dataset.open === 'fda' ? 'fullDiskAccess' : b.dataset.open })) });
+  if (r && r.value === 'again') return permissionsDlg();
+}
+
+async function historyDlg() {
+  let h;
+  try { h = await api('GET', 'history'); } catch (e) { return showError(e); }
+  const recs = h.records;
+  if (!recs.length) return okDlg('Restore Deleted Files', 'Nothing yet. Every time Pearfin moves files to the Trash, they show up here so you can put them back. The last 10 are kept.');
+  const checked = new Set();
+  const r = await modal({ title: 'Restore Deleted Files', wide: true, html: `<p>Put files back where they were. The last 10 removals are listed while their files are still in the Trash.</p><div class="dlist" id="h-rows"></div>`,
+    buttons: [{ label: 'Empty Trash…', value: 'empty', left: true }, { label: 'Close', value: null }, { label: 'Restore', value: 'restore', primary: true }],
+    onOpen: (form) => {
+      const draw = () => {
+        $('#h-rows', form).innerHTML = recs.map((x) => `<label class="row${x.available ? '' : ' off'}" data-id="${x.id}" style="grid-template-columns:30px minmax(0,1fr) auto"><div><input type="checkbox" class="cb" ${checked.has(x.id) ? 'checked' : ''} ${x.available ? '' : 'disabled'}></div>
+          <div class="c-name"><div class="two"><span class="nm">${esc(x.name)}</span><small>${fmtDate(x.time)} · ${plural(x.count, 'item')}${x.available < x.count ? ` · ${x.count - x.available} no longer in the Trash` : ''}</small></div></div><div class="c-r c-dim">${fmtSize(x.size)}</div></label>`).join('');
+        $$('#h-rows input', form).forEach((i) => i.onchange = () => { const id = i.closest('[data-id]').dataset.id; i.checked ? checked.add(id) : checked.delete(id); });
+      };
+      draw();
+    } });
+  if (!r) return;
+  if (r.value === 'restore') { if (checked.size) restore([...checked]); }
+  if (r.value === 'empty') {
+    const ok = await confirmDlg('Empty the Trash?', 'Everything in the Trash is deleted for good, including files Pearfin moved there. This can’t be undone.', 'Empty Trash', true);
+    if (ok) { try { await api('POST', 'trash/empty'); toast('Trash emptied'); refreshDisk(); } catch (e) { showError(e); } }
+  }
+}
+
+/* ------------------------------------------------------------ console */
+let conAfter = 0, conTimer = null;
+function toggleConsole(show) {
+  const el = $('#console'); el.hidden = show === undefined ? !el.hidden : !show;
+  clearInterval(conTimer);
+  if (!el.hidden) { pollConsole(); conTimer = setInterval(pollConsole, 1000); }
+}
+async function pollConsole() {
+  try {
+    const { lines } = await api('GET', 'console', { after: conAfter });
+    if (!lines.length) return;
+    conAfter = lines[lines.length - 1].id;
+    const body = $('#con-body'); const atEnd = body.scrollTop + body.clientHeight >= body.scrollHeight - 20;
+    body.insertAdjacentHTML('beforeend', lines.map((l) => `<div><span class="src">[${esc(l.source)}]</span> ${esc(l.text)}</div>`).join(''));
+    while (body.childElementCount > 800) body.firstElementChild.remove();
+    if (atEnd) body.scrollTop = body.scrollHeight;
+  } catch {}
+}
+$('#con-close').innerHTML = I.x; $('#con-clear').innerHTML = fa('eraser', 12);
+$('#con-close').onclick = () => toggleConsole(false);
+$('#con-clear').onclick = () => { $('#con-body').innerHTML = ''; };
+
+/* ------------------------------------------------------------ self update (same as Dropfin) */
+async function checkSelfUpdate(manual) {
+  try {
+    const u = await api('GET', 'update', manual ? { force: 1 } : null); S.update = u;
+    $('#upd-dot').hidden = !u.available;
+    if (!manual) return;
+    if (!u.enabled) return okDlg('Updates', 'This copy of Pearfin wasn’t built by GitHub, so it can’t check for updates.');
+    if (u.available) return updateDlg();
+    okDlg(u.reachable ? 'You’re up to date' : 'Couldn’t check', u.reachable ? `Pearfin ${u.current} is the latest build.` : 'GitHub couldn’t be reached. If the repository is private, the check can’t see its releases.');
+  } catch (e) { if (manual) showError(e); }
+}
+async function updateDlg() {
+  const r = await modal({ title: 'A new Pearfin is available', message: 'Download Pearfin.dmg from the release page, open it, and drag Pearfin into Applications to replace this one. Your settings stay.', icon: '<img src="/icon.svg" alt="">',
+    buttons: [{ label: 'Later', value: null }, { label: 'Open Release Page', value: true, primary: true }] });
+  if (r) api('POST', 'update/open');
+}
+
+/* ------------------------------------------------------------ native hooks: menu commands, dropped apps, links */
+window.pearfinCommand = (id) => {
+  if (modalOpen && !['settings'].includes(id)) return;
+  if (id.startsWith('page:')) return go(id.slice(5));
+  switch (id) {
+    case 'settings': return settingsDlg();
+    case 'permissions': return permissionsDlg();
+    case 'history': return historyDlg();
+    case 'emptyTrash': return historyDlg();
+    case 'checkUpdates': return checkSelfUpdate(true);
+    case 'console': return toggleConsole();
+    case 'find': { const s = $('#search'); if (s) { s.focus(); s.select(); } return; }
+    case 'refresh': { const b = $('#tb-refresh') || $('#tb-scan'); if (b) b.click(); return; }
+    case 'viewGrid': case 'viewList': S.view = id === 'viewGrid' ? 'grid' : 'list'; LS.set('view', S.view); return S.page === 'apps' && !S.detail && pageApps();
+    case 'uninstall': { if (S.page === 'apps' && S.detail) { const b = $('#d-go'); if (b && !b.disabled) b.click(); } else if (S.page === 'apps' && S.sel.size > 1) bulkUninstall(); return; }
+    case 'reveal': if (S.page === 'apps' && S.detail) api('POST', 'reveal', null, { path: S.detail.path }); return;
+    case 'export': if (S.page === 'apps' && S.detail) { const m = $('#d-more'); if (m) m.click(); } return;
+  }
+};
+/** Apps dropped on the window, opened with "Open With", or pearfin://uninstall?path=… links. */
+window.pearfinOpen = (items) => {
+  for (const it of items || []) {
+    let path = it, now = false;
+    if (/^pearfin:/i.test(it)) {
+      try { const u = new URL(it); path = u.searchParams.get('path') || decodeURIComponent(u.pathname.replace(/^\/+/, '/')); now = /uninstall/i.test(u.host || u.pathname); } catch { continue; }
+    }
+    if (path && path.replace(/\/$/, '').endsWith('.app')) { go('apps'); openApp(path.replace(/\/$/, ''), now); return; }
+  }
+  if (items && items.length) toast('Drop an app (.app) to see its files', true);
+};
+document.addEventListener('keydown', (e) => {
+  if (modalOpen) return;
+  if (!menuEl.hidden) { if (e.key === 'Escape') { e.preventDefault(); hideMenu(); } return; }
+  const typing = e.target.closest && e.target.closest('input, textarea, select');
+  if (e.key === 'Escape' && S.page === 'apps' && S.detail && !typing) { S.detail = null; pageApps(); }
+  if ((e.metaKey || e.ctrlKey) && e.key === 'f') { e.preventDefault(); window.pearfinCommand('find'); }
+  if ((e.metaKey || e.ctrlKey) && e.key === ',') { e.preventDefault(); settingsDlg(); }
+});
+// Dragging an app over the window in a regular browser (the app window handles drops natively).
+if (!IS_APP) {
+  document.addEventListener('dragover', (e) => { e.preventDefault(); content().classList.add('drop-here'); });
+  document.addEventListener('dragleave', (e) => { if (!e.relatedTarget) content().classList.remove('drop-here'); });
+  document.addEventListener('drop', (e) => { e.preventDefault(); content().classList.remove('drop-here'); });
+}
+
+/* ------------------------------------------------------------ boot */
+async function boot() {
+  try {
+    const st = await api('GET', 'state');
+    S.st = st; S.settings = st.settings; HOME = st.home; S.nativeArch = st.nativeArch;
+  } catch (e) { content().innerHTML = emptyBox(I.warn, 'Pearfin isn’t responding', esc(e.message)); return; }
+  renderPermDot();
+  const startup = S.settings.startupPage || 'apps';
+  go(visiblePages().some((p) => p.id === startup) ? startup : 'apps');
+  if (window.ipc) window.ipc.postMessage('ready');
+  if (S.st.fullDiskAccess === false && !LS.get('permAsked', false)) { LS.set('permAsked', true); setTimeout(permissionsDlg, 600); }
+  setTimeout(() => checkSelfUpdate(false), 4000);
+  if (S.settings.updaterOnLaunch) setTimeout(backgroundUpdateCheck, 2500);
+}
+/** "Check for app updates when Pearfin opens": fills the Updater page quietly and shows a count in the sidebar. */
+async function backgroundUpdateCheck() {
+  const st = S.cache.updater || (S.cache.updater = { items: null, running: false, lines: [], busy: {} });
+  if (st.running) return;
+  st.running = true;
+  try {
+    const { task } = await api('POST', 'updater/check');
+    const t = await follow(task);
+    st.items = t.result.updates; st.checked = t.result.checked; S.cache.updates = st.items;
+  } catch {}
+  st.running = false;
+  renderSidebar();
+  if (S.page === 'updater') pageUpdater();
+}
+boot();
+</script>
+</body>
+</html>

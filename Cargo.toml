@@ -1,0 +1,41 @@
+[package]
+name = "pearfin"
+version = "1.0.0"
+edition = "2021"
+description = "Mac app cleaner: uninstall apps with their leftovers, find orphaned files, and tidy up developer caches"
+license-file = "LICENSE.md"
+publish = false
+
+[features]
+default = ["gui"]
+gui = ["dep:wry", "dep:tao"]
+
+[dependencies]
+tokio = { version = "1", features = ["rt-multi-thread", "macros", "net", "fs", "io-util", "sync", "time", "process"] }
+axum = { version = "0.8", default-features = false, features = ["http1", "tokio", "query", "json"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+reqwest = { version = "0.13", default-features = false, features = ["json", "rustls", "blocking"] }
+rand = "0.9"
+anyhow = "1"
+plist = "1"
+rayon = "1"
+regex = "1"
+quick-xml = "0.38"
+ed25519-dalek = "2"
+base64 = "0.22"
+wry = { version = "0.57", optional = true }
+tao = { version = "0.37", optional = true }
+
+[target.'cfg(target_os = "macos")'.dependencies]
+muda = "0.21"
+rfd = "0.18"
+objc2 = "0.6"
+objc2-foundation = { version = "0.3", features = ["NSString", "NSData", "NSDictionary", "NSGeometry"] }
+objc2-app-kit = { version = "0.3", features = ["NSWorkspace", "NSImage", "NSImageRep", "NSBitmapImageRep", "NSGraphicsContext", "NSGraphics"] }
+
+[profile.release]
+opt-level = 3
+lto = "thin"
+codegen-units = 4
+strip = true
