@@ -7,6 +7,7 @@
   <key>CFBundleIdentifier</key><string>app.deskmart.mac</string>
   <key>CFBundleVersion</key><string>__VERSION__</string>
   <key>CFBundleShortVersionString</key><string>__VERSION__</string>
+  <key>DeskmartCommit</key><string>__COMMIT__</string>
   <key>CFBundlePackageType</key><string>APPL</string>
   <key>CFBundleExecutable</key><string>Deskmart</string>
   <key>CFBundleIconFile</key><string>Deskmart</string>

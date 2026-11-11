@@ -28,6 +28,9 @@ jobs:
           # Lets the app's update checker compare itself with the latest release of this repo.
           DESKMART_REPO: ${{ github.repository }}
           DESKMART_COMMIT: ${{ github.sha }}
+          # Optional: a stable signing certificate so permissions survive updates (scripts/make-signing-cert.sh).
+          DESKMART_SIGNING_P12: ${{ secrets.DESKMART_SIGNING_P12 }}
+          DESKMART_SIGNING_PASSWORD: ${{ secrets.DESKMART_SIGNING_PASSWORD }}
         run: bash scripts/bundle-macos.sh
 
       - name: Smoke test (the helper starts and answers)

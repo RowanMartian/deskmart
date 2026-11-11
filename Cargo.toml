@@ -24,6 +24,7 @@ regex = "1"
 quick-xml = "0.38"
 ed25519-dalek = "2"
 base64 = "0.22"
+sha2 = "0.10"
 wry = { version = "0.57", optional = true }
 tao = { version = "0.37", optional = true }
 

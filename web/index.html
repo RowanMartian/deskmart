@@ -599,10 +599,15 @@ function emptyBox(icon, title, text, button) {
 }
 const loadingBox = (text) => `<div class="loading"><span class="spin"></span><div>${esc(text || 'Loading…')}</div></div>`;
 const matches = (q, ...fields) => !q || fields.some((f) => f && String(f).toLowerCase().includes(q.toLowerCase()));
-function deniedBanner(denied) {
+/** Shown when macOS's privacy protection hid folders from a search — but only while Full Disk Access is off,
+ *  since granting it is the fix. `fda` is the status the search itself saw. */
+function deniedBanner(denied, fda) {
   if (!denied || !denied.length) return '';
+  if (fda === true) { if (S.st && !S.st.fullDiskAccess) { S.st.fullDiskAccess = true; renderPermDot(); } return ''; }
   const os = S.st && S.st.macosMajor >= 27 ? 'macOS 27 keeps other apps’ data private unless Deskmart has Full Disk Access.' : 'Deskmart needs Full Disk Access to look there.';
-  return `<div class="banner">${I.warn}<div class="grow">macOS didn't let Deskmart look in ${plural(denied.length, 'folder')}, so some files may be missing. ${esc(os)}</div><button class="btn sm" data-act="perm">Permissions…</button></div>`;
+  return `<div class="banner">${I.warn}<div class="grow">macOS didn't let Deskmart look in ${plural(denied.length, 'folder')}, so some files may be missing. ${esc(os)} If you just turned it on, quit and reopen Deskmart.
+    <details style="margin-top:4px"><summary class="link" style="font-size:12px">Show ${denied.length === 1 ? 'folder' : 'folders'}</summary><div style="margin-top:4px;font:11.5px ui-monospace,SFMono-Regular,Menlo,monospace;-webkit-user-select:text;user-select:text">${denied.map((d) => esc(tild(d))).join('<br>')}</div></details></div>
+    <button class="btn sm" data-act="perm">Permissions…</button></div>`;
 }
 document.addEventListener('click', (e) => { const b = e.target.closest('[data-act="perm"]'); if (b) permissionsDlg(); });
 
@@ -847,7 +852,7 @@ async function pageAppDetail() {
         </div>
         <div class="acts"><button class="btn" id="d-more">Options ${fa('chevron-down', 10)}</button></div>
       </div></div>
-      ${deniedBanner(res.denied)}
+      ${deniedBanner(res.denied, res.fullDiskAccess)}
       ${a.system && !bundleOn ? '' : ''}
       <div class="subbar"><label class="check"><input type="checkbox" class="cb" id="d-all" ${sel.length === res.files.length ? 'checked' : ''}> ${sel.length === res.files.length ? 'Deselect All' : 'Select All'}</label><span class="grow"></span><span>${plural(res.files.length, 'item')} · ${fmtSize(total)}${res.spotlight ? ` · ${res.spotlight} from Spotlight` : ''}</span></div>
       <div id="d-rows">${files.length ? fileRows(files, checked) : `<div class="hint" style="padding:16px 10px">No files match “${esc(S.filter)}”.</div>`}</div>
@@ -927,7 +932,7 @@ function pageOrphans() {
     const total = st.items.reduce((n, f) => n + f.size, 0);
     c.innerHTML = `<section class="files" tabindex="0" style="--cols:30px minmax(240px,1fr) auto 90px">
       <div class="banner info" style="margin-top:12px">${I.info}<div class="grow">This is a best guess: Deskmart can't see apps that are already gone, so it hides anything that matches an installed app. Check that what you select really belongs to deleted apps.</div></div>
-      ${deniedBanner(st.denied)}
+      ${deniedBanner(st.denied, st.fda)}
       <div class="subbar"><label class="check"><input type="checkbox" class="cb" id="o-all" ${sel.length && sel.length === st.items.length ? 'checked' : ''}> Select All</label><span class="grow"></span><span>${plural(st.items.length, 'item')} · ${fmtSize(total)}</span></div>
       <div id="o-rows">${items.length ? fileRows(items, st.checked) : `<div class="hint" style="padding:16px 10px">${st.items.length ? 'Nothing matches the filter.' : 'No orphaned files found. Nice and tidy.'}</div>`}</div></section>
       <div class="actionbar"><div class="info"><b>${plural(sel.length, 'item')}</b> selected · ${fmtSize(sel.reduce((n, f) => n + f.size, 0))}</div>
@@ -970,7 +975,7 @@ function pageOrphans() {
     try {
       const { task } = await api('POST', 'orphans/start'); st.task = task;
       const t = await follow(task, { onProgress: (p) => { st.progress = p; render(); } });
-      st.items = (t.result && t.result.items) || []; st.denied = (t.result && t.result.denied) || [];
+      st.items = (t.result && t.result.items) || []; st.denied = (t.result && t.result.denied) || []; st.fda = t.result && t.result.fullDiskAccess;
       st.items.sort((x, y) => y.size - x.size);
     } catch (e) { showError(e); st.items = st.items || null; }
     st.running = false;
@@ -1630,9 +1635,29 @@ async function checkSelfUpdate(manual) {
   } catch (e) { if (manual) showError(e); }
 }
 async function updateDlg() {
-  const r = await modal({ title: 'A new Deskmart is available', message: 'Download Deskmart.dmg from the release page, open it, and drag Deskmart into Applications to replace this one. Your settings stay.', icon: '<img src="/icon.svg" alt="">',
-    buttons: [{ label: 'Later', value: null }, { label: 'Open Release Page', value: true, primary: true }] });
-  if (r) api('POST', 'update/open');
+  const inPlace = S.st && S.st.selfUpdate;
+  const r = await modal({ title: 'A new Deskmart is available',
+    message: inPlace ? 'Deskmart downloads the new build, checks it, moves this copy to the Trash and reopens. Your settings stay.'
+      : 'Download Deskmart.dmg from the release page, open it, and drag Deskmart into Applications to replace this one. Your settings stay.',
+    icon: '<img src="/icon.svg" alt="">',
+    buttons: inPlace ? [{ label: 'Release Page', value: 'page', left: true }, { label: 'Later', value: null }, { label: 'Update and Relaunch', value: 'install', primary: true }]
+      : [{ label: 'Later', value: null }, { label: 'Open Release Page', value: 'page', primary: true }] });
+  if (!r) return;
+  if (r.value === 'page') return api('POST', 'update/open');
+  let task;
+  try { task = (await api('POST', 'update/install')).task; } catch (e) { return showError(e); }
+  modal({ title: 'Updating Deskmart', icon: '<img src="/icon.svg" alt="">', html: '<p id="su-step">Starting…</p><div class="bar"><i id="su-bar" style="width:0%"></i></div>',
+    buttons: [{ label: 'Cancel', value: 'cancel' }], onOpen: async (form, finish) => {
+      try {
+        await follow(task, { onProgress: (p) => {
+          if (!p) return;
+          $('#su-step', form).textContent = p.step ? p.step + (p.total ? ` · ${fmtSize(p.done)} of ${fmtSize(p.total)}` : '') + '…' : 'Working…';
+          $('#su-bar', form).style.width = p.total ? (100 * p.done / p.total).toFixed(1) + '%' : p.step === 'Installing' ? '100%' : $('#su-bar', form).style.width;
+        } });
+        $('#su-step', form).textContent = 'Installed. Deskmart is restarting…';
+        $('#su-bar', form).style.width = '100%';
+      } catch (e) { finish(null); showError(e); }
+    } }).then((x) => { if (x && x.value === 'cancel') api('POST', 'task/stop', null, { id: task }); });
 }
 
 /* ------------------------------------------------------------ native hooks: menu commands, dropped apps, links */

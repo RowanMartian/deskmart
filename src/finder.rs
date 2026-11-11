@@ -48,6 +48,26 @@ pub struct SearchResult {
     pub denied: Vec<String>,
     pub spotlight: usize,
     pub millis: u64,
+    /// Full Disk Access as detected at search time (None when it can't be told).
+    pub full_disk_access: Option<bool>,
+}
+
+/// True when a folder couldn't be read because of macOS privacy protection (Full Disk Access / app data).
+/// Plain Unix permissions (another user's or root's folder, EACCES) and Apple's own data vaults, which no app
+/// can open even with Full Disk Access, don't count: granting access wouldn't change anything there.
+pub fn privacy_denied(e: &std::io::Error, path: &str) -> bool {
+    if e.raw_os_error() != Some(1) {
+        log("Search", format!("Skipped {} ({e})", tildify(path)));
+        return false;
+    }
+    let name = file_name(path);
+    let apple = name.starts_with("com.apple.") || name.starts_with("group.com.apple.") || name.starts_with("systemgroup.com.apple.");
+    if apple || path.contains("/var/folders/") {
+        log("Search", format!("Skipped {} (protected by macOS)", tildify(path)));
+        return false;
+    }
+    log("Search", format!("macOS blocked {} (needs Full Disk Access)", tildify(path)));
+    true
 }
 
 struct Ids {
@@ -168,7 +188,7 @@ impl<'a> Finder<'a> {
         let rd = match std::fs::read_dir(location) {
             Ok(rd) => rd,
             Err(e) => {
-                if e.kind() == std::io::ErrorKind::PermissionDenied {
+                if privacy_denied(&e, location) {
                     self.denied.lock().unwrap().push(location.to_string());
                 }
                 return;
@@ -222,7 +242,7 @@ impl<'a> Finder<'a> {
         let rd = match std::fs::read_dir(&base) {
             Ok(r) => r,
             Err(e) => {
-                if e.kind() == std::io::ErrorKind::PermissionDenied {
+                if privacy_denied(&e, &base) {
                     self.denied.lock().unwrap().push(base.clone());
                 }
                 return out;
@@ -413,7 +433,7 @@ pub fn find_leftovers(app: &AppInfo, cfg: &Settings) -> SearchResult {
     denied.dedup();
     let total: u64 = files.iter().map(|x| x.size).sum();
     log("Apps", format!("Found {} items ({})", files.len(), fmt_size(total)));
-    SearchResult { files, denied, spotlight, millis: started.elapsed().as_millis() as u64 }
+    SearchResult { files, denied, spotlight, millis: started.elapsed().as_millis() as u64, full_disk_access: crate::tools::full_disk_access() }
 }
 
 // ------------------------------------------------------------------ orphans
@@ -454,7 +474,7 @@ pub fn find_orphans(apps: &[AppInfo], cfg: &Settings, stop: &std::sync::atomic::
         let rd = match std::fs::read_dir(&loc) {
             Ok(r) => r,
             Err(e) => {
-                if e.kind() == std::io::ErrorKind::PermissionDenied {
+                if privacy_denied(&e, &loc) {
                     denied.push(loc.clone());
                 }
                 continue;

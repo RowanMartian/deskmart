@@ -365,7 +365,7 @@ async fn dispatch(app: &Arc<App>, method: Method, uri: Uri, headers: HeaderMap, 
                 let cfg = a2.settings();
                 let (items, denied) = finder::find_orphans(&list, &cfg, &ctx.stop, &|n, loc| ctx.progress(json!({ "step": tildify(loc), "found": n })));
                 ctx.log(format!("Found {} orphaned items ({})", items.len(), fmt_size(items.iter().map(|x| x.size).sum())));
-                Ok(json!({ "items": items, "denied": denied }))
+                Ok(json!({ "items": items, "denied": denied, "fullDiskAccess": tools::full_disk_access() }))
             });
             json!({ "task": id })
         }
@@ -579,6 +579,27 @@ async fn dispatch(app: &Arc<App>, method: Method, uri: Uri, headers: HeaderMap, 
                 _ => return Err(ApiError::new(404, "No update to open")),
             }
         }
+        ("POST", "/api/update/install") => {
+            let (Some(repo), Some(commit)) = (BUILD_REPO.filter(|r| !r.is_empty()), BUILD_COMMIT) else {
+                return Err(ApiError::new(400, "This copy wasn't built by GitHub, so it can't update itself."));
+            };
+            let a2 = a.clone();
+            let id = app.tasks.spawn("selfupdate", "Update", move |ctx| {
+                let cfg = a2.settings();
+                let r = crate::selfupdate::install(&ctx, repo, commit, &cfg.app_folders, &a2.history_file)?;
+                // Quit so the relauncher can open the new copy.
+                let a3 = a2.clone();
+                std::thread::spawn(move || {
+                    std::thread::sleep(Duration::from_millis(900));
+                    match a3.quit.lock().unwrap().as_ref() {
+                        Some(f) => f(),
+                        None => std::process::exit(0),
+                    }
+                });
+                Ok(r)
+            });
+            json!({ "task": id })
+        }
         ("POST", "/api/quit") => {
             let app2 = app.clone();
             tokio::spawn(async move {
@@ -689,6 +710,7 @@ fn state(app: &App) -> Value {
         "free": free, "total": total, "settings": app.settings(), "nativeArch": native_arch(),
         "fullDiskAccess": tools::full_disk_access(), "sentinel": sentinel::installed(), "cli": cli_installed(),
         "brew": apps::brew_bin().is_some(), "trash": trash_dir().to_string_lossy(),
+        "selfUpdate": cfg!(target_os = "macos") && BUILD_REPO.is_some() && crate::selfupdate::current_bundle().is_some(),
     })
 }
 

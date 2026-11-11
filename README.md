@@ -67,8 +67,9 @@ If GitHub asks you to enable Actions for the repository, click the button to all
 
 In System Settings, click **+**, choose Deskmart in Applications, and switch it on.
 
-After you install a new Deskmart build, you may need to switch these off and on again.
-The GitHub build is signed without an Apple developer certificate, so macOS treats each build as a new app.
+After you install a new Deskmart build, you may need to switch these off and on again: the GitHub build is signed without
+an Apple developer certificate, so macOS can treat each build as a new app. [Keep permissions across updates](#keep-permissions-across-updates-optional-one-time) fixes this.
+If you just turned on Full Disk Access, quit and reopen Deskmart.
 
 ### macOS 27 Golden Gate
 
@@ -147,10 +148,26 @@ Run `deskmart help` for everything. Terminal needs Full Disk Access too for comp
 
 Every time GitHub builds a new version, copies of Deskmart built by GitHub notice it on their own.
 A small dot appears next to **…** at the bottom of the sidebar, and that menu gains **Update Available…**.
-Updating means downloading the new `Deskmart.dmg` and replacing the app in Applications. Your settings stay.
+Click **Update and Relaunch**: Deskmart downloads the new build, checks it matches what GitHub published,
+moves the current copy to the Trash (you can restore it from **Restore Deleted Files**), installs the new one and reopens. Your settings stay.
 
 The check is one small request to GitHub, at most a few times a day. It only works if the repository is **public**,
 because GitHub doesn't show private repositories' releases without signing in. With a private repository, the check quietly does nothing.
+
+### Keep permissions across updates (optional, one-time)
+
+macOS remembers Full Disk Access per app signature. Without an Apple developer account, each GitHub build is signed differently,
+so after an update you may need to switch Full Disk Access off and on again. To avoid that, give the build a certificate of its own, once:
+
+1. On your Mac, in Terminal, from this project's folder:
+   ```bash
+   bash scripts/make-signing-cert.sh
+   ```
+2. It copies the certificate to your clipboard and prints a password. On GitHub, open the repository → **Settings → Secrets and variables → Actions → New repository secret**,
+   and add `DESKMART_SIGNING_P12` (paste) and `DESKMART_SIGNING_PASSWORD` (the printed password).
+3. In the **Actions** tab, run **Build Mac app** again. Install that build by hand once, and turn on Full Disk Access for it.
+
+From then on, every build is signed by the same certificate, permissions survive updates, and the in-app updater refuses any build that isn't signed by it.
 
 ### Good to know
 
@@ -187,6 +204,8 @@ because GitHub doesn't show private repositories' releases without signing in. W
 | `src/tools.rs` | Translations, developer caches, packages, plugins, services, permission check |
 | `src/filesearch.rs`, `src/brew.rs`, `src/updater.rs` | File Search, Homebrew, Updater |
 | `src/sentinel.rs` | The Trash-watching background agent |
+| `src/selfupdate.rs` | Updating Deskmart itself from the latest GitHub build |
+| `scripts/make-signing-cert.sh` | One-time: a certificate so permissions survive updates |
 | `src/api.rs` | Local HTTP API used by the interface |
 | `src/gui.rs` | Native window (tao + wry + muda) |
 | `src/cli.rs` | The `deskmart` Terminal command |

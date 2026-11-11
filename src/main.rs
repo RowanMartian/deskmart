@@ -12,6 +12,7 @@ mod gui;
 mod icons;
 mod locations;
 mod macho;
+mod selfupdate;
 mod sentinel;
 mod tasks;
 mod tools;

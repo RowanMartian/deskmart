@@ -527,6 +527,33 @@ dependencies = [
 ]
 
 [[package]]
+name = "deskmart"
+version = "1.0.0"
+dependencies = [
+ "anyhow",
+ "axum",
+ "base64 0.22.1",
+ "ed25519-dalek",
+ "muda",
+ "objc2",
+ "objc2-app-kit",
+ "objc2-foundation",
+ "plist",
+ "quick-xml 0.38.4",
+ "rand 0.9.5",
+ "rayon",
+ "regex",
+ "reqwest",
+ "rfd",
+ "serde",
+ "serde_json",
+ "sha2",
+ "tao",
+ "tokio",
+ "wry",
+]
+
+[[package]]
 name = "digest"
 version = "0.10.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2064,32 +2091,6 @@ dependencies = [
  "redox_syscall",
  "smallvec",
  "windows-link",
-]
-
-[[package]]
-name = "deskmart"
-version = "1.0.0"
-dependencies = [
- "anyhow",
- "axum",
- "base64 0.22.1",
- "ed25519-dalek",
- "muda",
- "objc2",
- "objc2-app-kit",
- "objc2-foundation",
- "plist",
- "quick-xml 0.38.4",
- "rand 0.9.5",
- "rayon",
- "regex",
- "reqwest",
- "rfd",
- "serde",
- "serde_json",
- "tao",
- "tokio",
- "wry",
 ]
 
 [[package]]
