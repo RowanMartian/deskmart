@@ -173,7 +173,7 @@ pub fn skip_paths() -> Vec<String> {
         "/System/Volumes/Preboot/Cryptexes/App/System/Library/CoreServices/PasswordManagerBrowserExtensionHelper.app/Contents/MacOS/PasswordManagerBrowserExtensionHelper".into(),
         expand("~/Library/Application Support/Chromium/NativeMessagingHosts/com.apple.passwordmanager.json"),
         expand("~/Library/Application Support/Google/Chrome/NativeMessagingHosts/com.apple.passwordmanager.json"),
-        // Pearfin's own settings
+        // Deskmart's own settings
         data_dir().to_string_lossy().to_string(),
     ]
 }
@@ -207,7 +207,7 @@ pub const SKIP_REVERSE: &[&str] = &[
     "contextstoreagent", "mobilemeaccounts", "mobiledocuments", "mobile", "intentbuilderc", "loginwindow", "momc", "replayd", "sharedfilelistd", "clang",
     "audiocomponent", "csexattrcryptoservice", "livetranscriptionagent", "sandboxhelper", "statuskitagent", "betaenrollmentd", "contentlinkingd",
     "diagnosticextensionsd", "gamed", "heard", "homed", "itunescloudd", "lldb", "mds", "mediaanalysisd", "metrickitd", "mobiletimerd", "proactived", "ptpcamerad",
-    "studentd", "talagent", "watchlistd", "apptranslocation", "xcrun", "ds_store", "caches", "crashreporter", "trash", "pearcleaner", "pearfin",
+    "studentd", "talagent", "watchlistd", "apptranslocation", "xcrun", "ds_store", "caches", "crashreporter", "trash", "pearcleaner", "deskmart",
     "amsdatamigratortool", "arfilecache", "assistant", "chromium", "cloudkit", "webkit", "databases", "diagnostic", "cache", "gamekit", "homebrew", "logi",
     "microsoft", "mozilla", "sync", "google", "sentinel", "hexnode", "sentry", "tvappservices", "reminders", "pbs", "notarytool", "differentialprivacy",
     "storeassetd", "webpush", "storedownloadd", "fsck", "crash", "python", "discrecording", "photossearch", "pylint", "jamf", "scopedbookmarkagent", "anonymous",

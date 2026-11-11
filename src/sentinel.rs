@@ -5,7 +5,7 @@ use crate::util::*;
 use std::collections::HashSet;
 use std::time::Duration;
 
-pub const LABEL: &str = "app.pearfin.sentinel";
+pub const LABEL: &str = "app.deskmart.sentinel";
 
 fn plist_path() -> String {
     expand(&format!("~/Library/LaunchAgents/{LABEL}.plist"))

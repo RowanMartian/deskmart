@@ -44,7 +44,7 @@ pub struct Found {
 #[serde(rename_all = "camelCase")]
 pub struct SearchResult {
     pub files: Vec<Found>,
-    /// Folders macOS wouldn't let Pearfin read (Full Disk Access / app-data protection on macOS 27).
+    /// Folders macOS wouldn't let Deskmart read (Full Disk Access / app-data protection on macOS 27).
     pub denied: Vec<String>,
     pub spotlight: usize,
     pub millis: u64,

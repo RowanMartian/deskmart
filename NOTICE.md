@@ -1,11 +1,11 @@
 # Notice
 
-Pearfin is a derivative work of **Pearcleaner** by alienator88
+Deskmart is a derivative work of **Pearcleaner** by alienator88
 (https://github.com/alienator88/Pearcleaner), licensed under the Apache License 2.0 with the
-Commons Clause License Condition v1.0. The full license is in `LICENSE.md` and applies to Pearfin too:
+Commons Clause License Condition v1.0. The full license is in `LICENSE.md` and applies to Deskmart too:
 you may use, change and share it, but you may not sell it or a product whose value comes substantially from it.
 
-Pearfin is not affiliated with or endorsed by the Pearcleaner author.
+Deskmart is not affiliated with or endorsed by the Pearcleaner author.
 
 ## What changed from Pearcleaner
 

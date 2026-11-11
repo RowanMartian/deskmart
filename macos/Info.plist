@@ -2,28 +2,28 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-  <key>CFBundleName</key><string>Pearfin</string>
-  <key>CFBundleDisplayName</key><string>Pearfin</string>
-  <key>CFBundleIdentifier</key><string>app.pearfin.mac</string>
+  <key>CFBundleName</key><string>Deskmart</string>
+  <key>CFBundleDisplayName</key><string>Deskmart</string>
+  <key>CFBundleIdentifier</key><string>app.deskmart.mac</string>
   <key>CFBundleVersion</key><string>__VERSION__</string>
   <key>CFBundleShortVersionString</key><string>__VERSION__</string>
   <key>CFBundlePackageType</key><string>APPL</string>
-  <key>CFBundleExecutable</key><string>Pearfin</string>
-  <key>CFBundleIconFile</key><string>Pearfin</string>
+  <key>CFBundleExecutable</key><string>Deskmart</string>
+  <key>CFBundleIconFile</key><string>Deskmart</string>
   <key>LSMinimumSystemVersion</key><string>11.0</string>
   <key>LSApplicationCategoryType</key><string>public.app-category.utilities</string>
   <key>NSHighResolutionCapable</key><true/>
   <key>NSRequiresAquaSystemAppearance</key><false/>
   <key>NSHumanReadableCopyright</key><string>Uninstall apps and everything they leave behind. Based on Pearcleaner by alienator88.</string>
-  <!-- pearfin://uninstall?path=/Applications/Foo.app and pearfin://open?path=… -->
+  <!-- deskmart://uninstall?path=/Applications/Foo.app and deskmart://open?path=… -->
   <key>CFBundleURLTypes</key>
   <array>
     <dict>
-      <key>CFBundleURLName</key><string>app.pearfin.mac</string>
-      <key>CFBundleURLSchemes</key><array><string>pearfin</string></array>
+      <key>CFBundleURLName</key><string>app.deskmart.mac</string>
+      <key>CFBundleURLSchemes</key><array><string>deskmart</string></array>
     </dict>
   </array>
-  <!-- Drop an app on the Dock icon, or Finder → Open With → Pearfin -->
+  <!-- Drop an app on the Dock icon, or Finder → Open With → Deskmart -->
   <key>CFBundleDocumentTypes</key>
   <array>
     <dict>
@@ -33,9 +33,9 @@
       <key>LSItemContentTypes</key><array><string>com.apple.application-bundle</string></array>
     </dict>
   </array>
-  <key>NSAppleEventsUsageDescription</key><string>Pearfin asks apps to quit before uninstalling them, and asks Finder to empty the Trash when you choose Empty Trash.</string>
-  <key>NSDesktopFolderUsageDescription</key><string>Pearfin looks for files and Steam shortcuts that belong to the apps you uninstall.</string>
-  <key>NSDocumentsFolderUsageDescription</key><string>Pearfin looks for files that belong to the apps you uninstall, and File Search can look here.</string>
-  <key>NSDownloadsFolderUsageDescription</key><string>Pearfin saves exported file lists here, and File Search can look here.</string>
+  <key>NSAppleEventsUsageDescription</key><string>Deskmart asks apps to quit before uninstalling them, and asks Finder to empty the Trash when you choose Empty Trash.</string>
+  <key>NSDesktopFolderUsageDescription</key><string>Deskmart looks for files and Steam shortcuts that belong to the apps you uninstall.</string>
+  <key>NSDocumentsFolderUsageDescription</key><string>Deskmart looks for files that belong to the apps you uninstall, and File Search can look here.</string>
+  <key>NSDownloadsFolderUsageDescription</key><string>Deskmart saves exported file lists here, and File Search can look here.</string>
 </dict>
 </plist>

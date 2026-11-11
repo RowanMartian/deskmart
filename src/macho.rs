@@ -30,7 +30,7 @@ impl Arch {
     }
 }
 
-/// The architecture this build of Pearfin runs as (and so what the Mac runs natively).
+/// The architecture this build of Deskmart runs as (and so what the Mac runs natively).
 pub fn native_cpu() -> u32 {
     if cfg!(target_arch = "x86_64") {
         CPU_X86_64
@@ -260,7 +260,7 @@ pub fn thin(path: &Path) -> Result<u64, String> {
     let mut data = vec![0u8; s.size as usize];
     f.read_exact(&mut data).map_err(|e| e.to_string())?;
     drop(f);
-    let tmp = path.with_file_name(format!(".{}.pearfin-thin", path.file_name().unwrap().to_string_lossy()));
+    let tmp = path.with_file_name(format!(".{}.deskmart-thin", path.file_name().unwrap().to_string_lossy()));
     {
         let mut out = File::create(&tmp).map_err(|e| e.to_string())?;
         out.write_all(&data).map_err(|e| e.to_string())?;
@@ -305,7 +305,7 @@ mod tests {
     use super::*;
     #[test]
     fn fat_roundtrip() {
-        let dir = std::env::temp_dir().join(format!("pearfin-test-{}", std::process::id()));
+        let dir = std::env::temp_dir().join(format!("deskmart-test-{}", std::process::id()));
         std::fs::create_dir_all(&dir).unwrap();
         let p = dir.join("bin");
         // Build a fake universal binary: x86_64 slice at 4096 (size 100), arm64 slice at 8192 (size 50).

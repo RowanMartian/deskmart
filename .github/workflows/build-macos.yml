@@ -23,32 +23,32 @@ jobs:
       - name: Run tests
         run: cargo test --locked --no-default-features
 
-      - name: Build Pearfin.app
+      - name: Build Deskmart.app
         env:
           # Lets the app's update checker compare itself with the latest release of this repo.
-          PEARFIN_REPO: ${{ github.repository }}
-          PEARFIN_COMMIT: ${{ github.sha }}
+          DESKMART_REPO: ${{ github.repository }}
+          DESKMART_COMMIT: ${{ github.sha }}
         run: bash scripts/bundle-macos.sh
 
       - name: Smoke test (the helper starts and answers)
         run: |
-          dist/Pearfin.app/Contents/MacOS/Pearfin --server-only --port 47399 &
+          dist/Deskmart.app/Contents/MacOS/Deskmart --server-only --port 47399 &
           for i in $(seq 1 20); do curl -fsS http://localhost:47399/api/hello && break; sleep 0.5; done
-          dist/Pearfin.app/Contents/MacOS/Pearfin list /Applications | tail -3
+          dist/Deskmart.app/Contents/MacOS/Deskmart list /Applications | tail -3
           kill %1
 
       - name: Keep a copy with this run
         uses: actions/upload-artifact@v4
         with:
-          name: Pearfin-mac
-          path: dist/Pearfin.dmg
+          name: Deskmart-mac
+          path: dist/Deskmart.dmg
 
       - name: Publish to the "Latest build" release
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           gh release delete latest --yes --cleanup-tag || true
-          gh release create latest dist/Pearfin.dmg dist/Pearfin-mac.zip \
-            --title "Pearfin — latest build" \
+          gh release create latest dist/Deskmart.dmg dist/Deskmart-mac.zip \
+            --title "Deskmart — latest build" \
             --target "$GITHUB_SHA" \
-            --notes "Built automatically from commit ${GITHUB_SHA::7}. Download **Pearfin.dmg**, open it, and drag Pearfin into Applications."
+            --notes "Built automatically from commit ${GITHUB_SHA::7}. Download **Deskmart.dmg**, open it, and drag Deskmart into Applications."

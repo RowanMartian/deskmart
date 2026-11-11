@@ -20,7 +20,7 @@ pub fn env() -> Vec<(&'static str, String)> {
     v
 }
 
-/// A tiny script that runs `Pearfin --askpass` (sudo needs a program path without arguments).
+/// A tiny script that runs `Deskmart --askpass` (sudo needs a program path without arguments).
 fn askpass_script() -> Option<String> {
     if !cfg!(target_os = "macos") {
         return None;
@@ -39,9 +39,9 @@ fn askpass_script() -> Option<String> {
     Some(p.to_string_lossy().to_string())
 }
 
-/// `Pearfin --askpass`: show a password dialog and print the answer for sudo.
+/// `Deskmart --askpass`: show a password dialog and print the answer for sudo.
 pub fn askpass_main() {
-    let script = r#"display dialog "Homebrew needs your Mac password to finish." with title "Pearfin" default answer "" with hidden answer buttons {"Cancel", "OK"} default button "OK" with icon caution
+    let script = r#"display dialog "Homebrew needs your Mac password to finish." with title "Deskmart" default answer "" with hidden answer buttons {"Cancel", "OK"} default button "OK" with icon caution
 text returned of result"#;
     let o = cmd("/usr/bin/osascript", &["-e", script], Duration::from_secs(300));
     if o.ok {

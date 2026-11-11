@@ -1,6 +1,6 @@
 #!/bin/bash
-# Builds dist/Pearfin.app (universal: Apple Silicon + Intel), ad-hoc signs it,
-# and packages dist/Pearfin.dmg and dist/Pearfin-mac.zip. Run on macOS. No Xcode needed.
+# Builds dist/Deskmart.app (universal: Apple Silicon + Intel), ad-hoc signs it,
+# and packages dist/Deskmart.dmg and dist/Deskmart-mac.zip. Run on macOS. No Xcode needed.
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
@@ -12,13 +12,13 @@ cargo build --release --locked --target aarch64-apple-darwin
 cargo build --release --locked --target x86_64-apple-darwin
 
 rm -rf dist
-APP="dist/Pearfin.app"
+APP="dist/Deskmart.app"
 mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
-lipo -create -output "$APP/Contents/MacOS/Pearfin" \
-  target/aarch64-apple-darwin/release/pearfin \
-  target/x86_64-apple-darwin/release/pearfin
+lipo -create -output "$APP/Contents/MacOS/Deskmart" \
+  target/aarch64-apple-darwin/release/deskmart \
+  target/x86_64-apple-darwin/release/deskmart
 sed "s/__VERSION__/$VERSION/g" macos/Info.plist > "$APP/Contents/Info.plist"
-cp macos/Pearfin.icns "$APP/Contents/Resources/Pearfin.icns"
+cp macos/Deskmart.icns "$APP/Contents/Resources/Deskmart.icns"
 cp LICENSE.md NOTICE.md "$APP/Contents/Resources/"
 plutil -lint "$APP/Contents/Info.plist"
 
@@ -26,13 +26,13 @@ plutil -lint "$APP/Contents/Info.plist"
 codesign --force --deep --sign - "$APP"
 codesign --verify --verbose "$APP"
 
-ditto -c -k --keepParent "$APP" dist/Pearfin-mac.zip
+ditto -c -k --keepParent "$APP" dist/Deskmart-mac.zip
 
 mkdir -p dist/dmg
 cp -R "$APP" dist/dmg/
 ln -s /Applications dist/dmg/Applications
-hdiutil create -volname "Pearfin" -srcfolder dist/dmg -ov -format UDZO dist/Pearfin.dmg
+hdiutil create -volname "Deskmart" -srcfolder dist/dmg -ov -format UDZO dist/Deskmart.dmg
 rm -rf dist/dmg
 
-lipo -info "$APP/Contents/MacOS/Pearfin"
+lipo -info "$APP/Contents/MacOS/Deskmart"
 ls -lh dist

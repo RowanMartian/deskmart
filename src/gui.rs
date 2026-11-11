@@ -20,7 +20,7 @@ enum UserEvent {
 
 /// Window dragging + no browser context menu. Runs before the page's own scripts.
 const INIT_JS: &str = r#"
-window.__PEARFIN_APP__ = true;
+window.__DESKMART_APP__ = true;
 (() => {
   const DRAG = '.toolbar, .sb-head, .welcome';
   const NO = 'button, input, label, a, select, textarea, .seg, .scrim, .menu, .chip, .tb-title';
@@ -45,9 +45,9 @@ struct Bounds {
 }
 
 fn fatal(msg: &str) -> ! {
-    eprintln!("Pearfin couldn't start: {msg}");
+    eprintln!("Deskmart couldn't start: {msg}");
     #[cfg(target_os = "macos")]
-    rfd::MessageDialog::new().set_level(rfd::MessageLevel::Error).set_title("Pearfin couldn't start").set_description(msg).show();
+    rfd::MessageDialog::new().set_level(rfd::MessageLevel::Error).set_title("Deskmart couldn't start").set_description(msg).show();
     std::process::exit(1);
 }
 
@@ -91,7 +91,7 @@ pub fn run(app: Arc<App>, port: u16, initial: Vec<String>) {
     let saved: Option<Bounds> = std::fs::read_to_string(&bounds_file).ok().and_then(|t| serde_json::from_str(&t).ok());
     let (w, h) = saved.as_ref().map(|b| (b.width, b.height)).unwrap_or((1180.0, 760.0));
     let mut wb = WindowBuilder::new()
-        .with_title("Pearfin")
+        .with_title("Deskmart")
         .with_inner_size(LogicalSize::new(w.max(860.0), h.max(520.0)))
         .with_min_inner_size(LogicalSize::new(860.0, 520.0));
     if let Some(b) = &saved {
@@ -179,7 +179,7 @@ pub fn run(app: Arc<App>, port: u16, initial: Vec<String>) {
             *control_flow = ControlFlow::Exit;
         };
         let deliver = |items: &[String]| {
-            let js = format!("window.pearfinOpen && window.pearfinOpen({})", serde_json::to_string(items).unwrap_or_default());
+            let js = format!("window.deskmartOpen && window.deskmartOpen({})", serde_json::to_string(items).unwrap_or_default());
             let _ = webview.evaluate_script(&js);
         };
         match event {
@@ -222,7 +222,7 @@ pub fn run(app: Arc<App>, port: u16, initial: Vec<String>) {
                     let _ = std::process::Command::new("/usr/bin/open").arg(&app_ev.data_dir).spawn();
                 }
                 id => {
-                    let js = format!("window.pearfinCommand && window.pearfinCommand({})", serde_json::to_string(id).unwrap_or_default());
+                    let js = format!("window.deskmartCommand && window.deskmartCommand({})", serde_json::to_string(id).unwrap_or_default());
                     let _ = webview.evaluate_script(&js);
                 }
             },
@@ -235,7 +235,7 @@ pub fn run(app: Arc<App>, port: u16, initial: Vec<String>) {
 fn confirm_quit(window: &tao::window::Window) -> bool {
     let r = rfd::MessageDialog::new()
         .set_level(rfd::MessageLevel::Warning)
-        .set_title("Pearfin is still working")
+        .set_title("Deskmart is still working")
         .set_description("A scan or Homebrew task is running. If you quit now, it stops.")
         .set_buttons(rfd::MessageButtons::OkCancelCustom("Stop and Quit".into(), "Keep Working".into()))
         .set_parent(window)
@@ -258,18 +258,18 @@ fn build_menu() -> muda::Menu {
         _ => api::VERSION.to_string(),
     };
     let about = AboutMetadata {
-        name: Some("Pearfin".into()),
+        name: Some("Deskmart".into()),
         version: Some(version),
         comments: Some("Uninstall apps and everything they leave behind.\nA Rust rebuild of Pearcleaner by alienator88.".into()),
         ..Default::default()
     };
-    let app_menu = Submenu::with_items("Pearfin", true, &[
+    let app_menu = Submenu::with_items("Deskmart", true, &[
         &P::about(None, Some(about)),
         &item("checkUpdates", "Check for Updates…", None), &sep(),
         &item("settings", "Settings…", Some("CmdOrCtrl+Comma")),
         &item("permissions", "Permissions…", None), &sep(),
         &P::services(None), &sep(), &P::hide(None), &P::hide_others(None), &P::show_all(None), &sep(),
-        &item("quit", "Quit Pearfin", Some("CmdOrCtrl+Q")),
+        &item("quit", "Quit Deskmart", Some("CmdOrCtrl+Q")),
     ]).unwrap();
     let file = Submenu::with_items("File", true, &[
         &item("uninstall", "Uninstall…", Some("CmdOrCtrl+Backspace")),

@@ -46,9 +46,9 @@ impl AppInfo {
     }
 }
 
-/// Apps Pearfin never lists (part of macOS, or Pearfin itself).
+/// Apps Deskmart never lists (part of macOS, or Deskmart itself).
 fn restricted(p: &str) -> bool {
-    p.contains("/Applications/Safari") || p.contains("/Applications/Utilities") || p.ends_with("/Pearfin.app") || p.starts_with("/System/")
+    p.contains("/Applications/Safari") || p.contains("/Applications/Utilities") || p.ends_with("/Deskmart.app") || p.starts_with("/System/")
 }
 
 pub fn collect_app_paths(folders: &[String]) -> Vec<String> {

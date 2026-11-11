@@ -15,8 +15,8 @@ use std::time::Duration;
 
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");
 /// Baked in by the GitHub build (see .github/workflows); absent in local builds, which disables update checks.
-pub const BUILD_REPO: Option<&str> = option_env!("PEARFIN_REPO");
-pub const BUILD_COMMIT: Option<&str> = option_env!("PEARFIN_COMMIT");
+pub const BUILD_REPO: Option<&str> = option_env!("DESKMART_REPO");
+pub const BUILD_COMMIT: Option<&str> = option_env!("DESKMART_COMMIT");
 
 const INDEX_HTML: &str = include_str!("../web/index.html");
 const ICON_SVG: &str = include_str!("../web/icon.svg");
@@ -168,15 +168,15 @@ async fn dispatch(app: &Arc<App>, method: Method, uri: Uri, headers: HeaderMap, 
     }
     let path = uri.path().to_string();
     if path == "/api/hello" {
-        return Ok(ok(json!({ "app": "pearfin", "version": VERSION })));
+        return Ok(ok(json!({ "app": "deskmart", "version": VERSION })));
     }
     if !path.starts_with("/api/") {
         return static_file(app, &path);
     }
     let q = query(&uri);
-    let token = headers.get("x-pearfin-token").and_then(|h| h.to_str().ok()).map(String::from).or_else(|| q.get("t").cloned());
+    let token = headers.get("x-deskmart-token").and_then(|h| h.to_str().ok()).map(String::from).or_else(|| q.get("t").cloned());
     if token.as_deref() != Some(app.token.as_str()) {
-        return Err(ApiError::new(403, "Pearfin restarted — reload the page.").reason("token"));
+        return Err(ApiError::new(403, "Deskmart restarted — reload the page.").reason("token"));
     }
     if method == Method::GET && path == "/api/icon" {
         return icon(&q).await;
@@ -559,7 +559,7 @@ async fn dispatch(app: &Arc<App>, method: Method, uri: Uri, headers: HeaderMap, 
             let paths = strs(&b, "paths");
             let name = s(&b, "name");
             let dir = home_dir().join("Downloads");
-            let file = dir.join(format!("{} files.txt", if name.is_empty() { "Pearfin" } else { &name }));
+            let file = dir.join(format!("{} files.txt", if name.is_empty() { "Deskmart" } else { &name }));
             std::fs::write(&file, paths.join("\n") + "\n")?;
             if cfg!(target_os = "macos") {
                 let _ = std::process::Command::new("/usr/bin/open").arg("-R").arg(&file).spawn();
@@ -623,7 +623,7 @@ pub fn thin_app(path: &str) -> Result<u64, String> {
     }
     let before = size_str(path);
     let exe = std::env::current_exe().map_err(|e| e.to_string())?;
-    run_as_admin(&format!("{} --thin {}", sh_quote(&exe.to_string_lossy()), sh_quote(path)), &format!("Pearfin wants to slim down {}.", file_name(path)))?;
+    run_as_admin(&format!("{} --thin {}", sh_quote(&exe.to_string_lossy()), sh_quote(path)), &format!("Deskmart wants to slim down {}.", file_name(path)))?;
     Ok(before.saturating_sub(size_str(path)))
 }
 
@@ -698,16 +698,16 @@ fn permissions() -> Value {
 }
 
 fn cli_installed() -> bool {
-    std::fs::read_link("/usr/local/bin/pearfin").is_ok()
+    std::fs::read_link("/usr/local/bin/deskmart").is_ok()
 }
 fn cli_link(install: bool) -> Result<(), String> {
     let exe = std::env::current_exe().map_err(|e| e.to_string())?;
     let script = if install {
-        format!("/bin/mkdir -p /usr/local/bin && /bin/ln -sf {} /usr/local/bin/pearfin", sh_quote(&exe.to_string_lossy()))
+        format!("/bin/mkdir -p /usr/local/bin && /bin/ln -sf {} /usr/local/bin/deskmart", sh_quote(&exe.to_string_lossy()))
     } else {
-        "/bin/rm -f /usr/local/bin/pearfin".to_string()
+        "/bin/rm -f /usr/local/bin/deskmart".to_string()
     };
-    run_as_admin(&script, "Pearfin wants to set up the pearfin command for Terminal.").map(|_| ())
+    run_as_admin(&script, "Deskmart wants to set up the deskmart command for Terminal.").map(|_| ())
 }
 
 async fn icon(q: &HashMap<String, String>) -> R<Response> {
@@ -723,7 +723,7 @@ async fn icon(q: &HashMap<String, String>) -> R<Response> {
 fn static_file(app: &App, path: &str) -> R<Response> {
     let (ctype, body): (&str, Body) = match path {
         "/" | "/index.html" => {
-            let html = INDEX_HTML.replace("__PEARFIN_TOKEN__", &app.token);
+            let html = INDEX_HTML.replace("__DESKMART_TOKEN__", &app.token);
             return Ok(([("content-type", "text/html; charset=utf-8"), ("cache-control", "no-store"), ("x-frame-options", "DENY"), ("referrer-policy", "no-referrer")], html).into_response());
         }
         "/icon.svg" => ("image/svg+xml", Body::from(ICON_SVG)),
@@ -755,7 +755,7 @@ async fn check_update(app: &App, force: bool) -> R<Value> {
     let url = format!("https://api.github.com/repos/{repo}/releases/tags/latest");
     let current = &commit[..7];
     let result = async {
-        let client = reqwest::Client::builder().timeout(Duration::from_secs(8)).user_agent(format!("Pearfin/{VERSION}")).build().ok()?;
+        let client = reqwest::Client::builder().timeout(Duration::from_secs(8)).user_agent(format!("Deskmart/{VERSION}")).build().ok()?;
         let r = client.get(&url).header("Accept", "application/vnd.github+json").send().await.ok()?;
         if !r.status().is_success() {
             return None;
@@ -786,7 +786,7 @@ pub async fn serve(app: Arc<App>, preferred: u16, on_ready: impl FnOnce(u16)) ->
             Err(e) => return Err(e.into()),
         }
     };
-    println!("Pearfin {VERSION} running at http://localhost:{port}/");
+    println!("Deskmart {VERSION} running at http://localhost:{port}/");
     on_ready(port);
     axum::serve(listener, router(app)).await?;
     Ok(())

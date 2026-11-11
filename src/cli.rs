@@ -1,17 +1,17 @@
-//! Terminal commands (port of CLI.swift). Install with Settings → General → "pearfin command".
+//! Terminal commands (port of CLI.swift). Install with Settings → General → "deskmart command".
 
 use crate::util::*;
 
-const HELP: &str = "Pearfin — uninstall Mac apps and everything they leave behind
+const HELP: &str = "Deskmart — uninstall Mac apps and everything they leave behind
 
 Usage:
-  pearfin list [folder]               List installed apps
-  pearfin search <app> [--level L]    Show the files that belong to an app (L: strict, enhanced, deep)
-  pearfin uninstall <app> [--level L] Move an app and its files to the Trash
-  pearfin remove <app> [--level L]    Move only the app's leftover files to the Trash (keep the app)
-  pearfin orphans                     List files left behind by apps that are gone
-  pearfin remove-orphans              Move all orphaned files to the Trash
-  pearfin help                        Show this help
+  deskmart list [folder]               List installed apps
+  deskmart search <app> [--level L]    Show the files that belong to an app (L: strict, enhanced, deep)
+  deskmart uninstall <app> [--level L] Move an app and its files to the Trash
+  deskmart remove <app> [--level L]    Move only the app's leftover files to the Trash (keep the app)
+  deskmart orphans                     List files left behind by apps that are gone
+  deskmart remove-orphans              Move all orphaned files to the Trash
+  deskmart help                        Show this help
 
 <app> is a path (/Applications/Foo.app) or an app name.";
 
@@ -56,7 +56,7 @@ pub fn run(args: &[String]) -> i32 {
         }
         "search" | "uninstall" | "remove" => {
             let Some(q) = args.get(1).filter(|a| !a.starts_with("--")) else {
-                eprintln!("Which app? For example: pearfin {} /Applications/Foo.app", args[0]);
+                eprintln!("Which app? For example: deskmart {} /Applications/Foo.app", args[0]);
                 return 2;
             };
             let Some(app) = resolve(&cfg, q) else {

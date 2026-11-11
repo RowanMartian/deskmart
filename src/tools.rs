@@ -368,7 +368,7 @@ pub fn package_files(id: &str) -> Value {
 }
 
 pub fn forget_package(id: &str) -> Result<(), String> {
-    run_as_admin(&format!("/usr/sbin/pkgutil --forget {}", sh_quote(id)), "Pearfin wants to remove this package's install record.").map(|_| ())
+    run_as_admin(&format!("/usr/sbin/pkgutil --forget {}", sh_quote(id)), "Deskmart wants to remove this package's install record.").map(|_| ())
 }
 
 // ------------------------------------------------------------------ plugins
@@ -466,7 +466,7 @@ pub fn service_action(action: &str, label: &str, path: Option<&str>, kind: &str)
     };
     if system {
         let script = format!("/bin/launchctl {}", args.iter().map(|a| sh_quote(a)).collect::<Vec<_>>().join(" "));
-        return run_as_admin(&script, "Pearfin wants to change a system service.");
+        return run_as_admin(&script, "Deskmart wants to change a system service.");
     }
     let refs: Vec<&str> = args.iter().map(|s| s.as_str()).collect();
     let o = cmd_quick("/bin/launchctl", &refs);

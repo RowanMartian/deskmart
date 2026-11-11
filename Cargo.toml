@@ -1,5 +1,5 @@
 [package]
-name = "pearfin"
+name = "deskmart"
 version = "1.0.0"
 edition = "2021"
 description = "Mac app cleaner: uninstall apps with their leftovers, find orphaned files, and tidy up developer caches"

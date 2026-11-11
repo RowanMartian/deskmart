@@ -1,7 +1,7 @@
-# Pearfin
+# Deskmart
 
 A native Mac app cleaner. Uninstall apps together with everything they leave behind, find files from apps you already deleted, and clear out developer caches.
-Pearfin is a Rust rebuild of [Pearcleaner](https://github.com/alienator88/Pearcleaner) by alienator88, which is on hold and doesn't support macOS 27 Golden Gate. Pearfin does.
+Deskmart is a Rust rebuild of [Pearcleaner](https://github.com/alienator88/Pearcleaner) by alienator88, which is on hold and doesn't support macOS 27 Golden Gate. Deskmart does.
 
 - **Apps:** see every file an app keeps (caches, preferences, containers, launch agents, logs) and move the app and its files to the Trash in one go
 - **Orphans:** find files left behind by apps that are already gone
@@ -12,7 +12,7 @@ Pearfin is a Rust rebuild of [Pearcleaner](https://github.com/alienator88/Pearcl
 - **Homebrew:** installed packages, search and install, updates, cleanup, doctor and taps
 - **Packages, Plugins, Services:** installer receipts, audio units and other plugins, launch agents and daemons
 - **Restore:** everything goes to the Trash first, and you can put it back
-- Drop an app on the window or the Dock icon, use `pearfin://uninstall?path=…` links, or the `pearfin` Terminal command
+- Drop an app on the window or the Dock icon, use `deskmart://uninstall?path=…` links, or the `deskmart` Terminal command
 - A small, fast native app. Written in Rust, using the Mac's built-in WebKit for the interface.
 
 ---
@@ -26,13 +26,13 @@ You only do this once. After that, every change rebuilds the app automatically.
 
 1. Sign in at **github.com**. A free account works.
 2. Click **+** (top right) → **New repository**.
-3. Name it `pearfin`. Public is best (see Updates below), but **Private** works too. Don't tick "Add a README". Click **Create repository**.
+3. Name it `deskmart`. Public is best (see Updates below), but **Private** works too. Don't tick "Add a README". Click **Create repository**.
 4. Upload the files using one of these options:
-   - **Easiest:** tell Claude the repository name (for example `your-name/pearfin`) and it pushes the code for you.
+   - **Easiest:** tell Claude the repository name (for example `your-name/deskmart`) and it pushes the code for you.
    - **GitHub Desktop:** File → Add Local Repository → choose this folder → Publish.
    - **Terminal**, from inside this folder:
      ```bash
-     git remote add origin https://github.com/YOUR-NAME/pearfin.git
+     git remote add origin https://github.com/YOUR-NAME/deskmart.git
      ```
      ```bash
      git push -u origin main
@@ -45,15 +45,15 @@ If GitHub asks you to enable Actions for the repository, click the button to all
 
 ### 3. Download and install
 
-1. Go to the repository's main page → **Releases** (right-hand side) → **Pearfin — latest build**.
-2. Download **Pearfin.dmg**, open it, and drag **Pearfin** onto **Applications**.
-3. The first time you open it, macOS warns that it can't verify the developer. Pearfin isn't from the App Store or notarized by Apple.
+1. Go to the repository's main page → **Releases** (right-hand side) → **Deskmart — latest build**.
+2. Download **Deskmart.dmg**, open it, and drag **Deskmart** onto **Applications**.
+3. The first time you open it, macOS warns that it can't verify the developer. Deskmart isn't from the App Store or notarized by Apple.
    Go to **System Settings → Privacy & Security**, scroll down, and click **Open Anyway**.
    Or run this once in Terminal:
    ```bash
-   xattr -cr /Applications/Pearfin.app
+   xattr -cr /Applications/Deskmart.app
    ```
-4. Give Pearfin **Full Disk Access** (see below). Pearfin shows you how the first time it opens.
+4. Give Deskmart **Full Disk Access** (see below). Deskmart shows you how the first time it opens.
 
 ---
 
@@ -63,26 +63,26 @@ If GitHub asks you to enable Actions for the repository, click the button to all
 | --- | --- | --- |
 | Full Disk Access | To look in every Library folder, including other apps' containers | System Settings → Privacy & Security → Full Disk Access |
 | App Management | To move other apps to the Trash and slim them with Lipo | System Settings → Privacy & Security → App Management |
-| Your Mac password | Only for files owned by the system, such as in `/Library`. Uses the standard macOS prompt; Pearfin never sees it | Asked when needed |
+| Your Mac password | Only for files owned by the system, such as in `/Library`. Uses the standard macOS prompt; Deskmart never sees it | Asked when needed |
 
-In System Settings, click **+**, choose Pearfin in Applications, and switch it on.
+In System Settings, click **+**, choose Deskmart in Applications, and switch it on.
 
-After you install a new Pearfin build, you may need to switch these off and on again.
+After you install a new Deskmart build, you may need to switch these off and on again.
 The GitHub build is signed without an Apple developer certificate, so macOS treats each build as a new app.
 
 ### macOS 27 Golden Gate
 
-- macOS 27 keeps apps' data private from other apps. Without Full Disk Access, Pearfin can't see inside other apps' containers.
-  Instead of quietly missing those files, Pearfin tells you which folders it couldn't read.
-- Pearcleaner checked for Full Disk Access by reading the TCC database, which macOS 27 no longer allows. Pearfin checks a different way, so the status is right.
+- macOS 27 keeps apps' data private from other apps. Without Full Disk Access, Deskmart can't see inside other apps' containers.
+  Instead of quietly missing those files, Deskmart tells you which folders it couldn't read.
+- Pearcleaner checked for Full Disk Access by reading the TCC database, which macOS 27 no longer allows. Deskmart checks a different way, so the status is right.
 - Golden Gate runs only on Apple silicon. Lipo shows how much space the unused Intel code takes, and the app list marks Intel-only apps, which need Rosetta.
-- Pearfin also runs on macOS 11 Big Sur and later, on Apple silicon and Intel.
+- Deskmart also runs on macOS 11 Big Sur and later, on Apple silicon and Intel.
 
 ---
 
 ## Using it
 
-Open **Apps** and click an app. Pearfin lists the app and every file it found for it, already ticked. Untick anything you want to keep, then click **Uninstall**.
+Open **Apps** and click an app. Deskmart lists the app and every file it found for it, already ticked. Untick anything you want to keep, then click **Uninstall**.
 If you untick the app itself, the button becomes **Remove Items**, which cleans up leftovers and keeps the app.
 
 Everything goes to the Trash, inside a folder named after the app and the time, for example `Slack_2026-11-11_09-30-12`.
@@ -102,32 +102,32 @@ You can set a different level for one app from its **Options** menu.
 
 ### Sentinel
 
-Settings → General → **Sentinel** watches the Trash. When you drag an app to the Trash yourself, Pearfin finds its leftover files (Strict level) and moves them to the Trash too.
-It runs as a small background agent (`~/Library/LaunchAgents/app.pearfin.sentinel.plist`).
+Settings → General → **Sentinel** watches the Trash. When you drag an app to the Trash yourself, Deskmart finds its leftover files (Strict level) and moves them to the Trash too.
+It runs as a small background agent (`~/Library/LaunchAgents/app.deskmart.sentinel.plist`).
 
 ### Terminal
 
-Settings → General → **Terminal command** adds `pearfin` to `/usr/local/bin`.
+Settings → General → **Terminal command** adds `deskmart` to `/usr/local/bin`.
 
 ```bash
-pearfin list
+deskmart list
 ```
 ```bash
-pearfin search "Visual Studio Code"
+deskmart search "Visual Studio Code"
 ```
 ```bash
-pearfin uninstall /Applications/Slack.app --level enhanced
+deskmart uninstall /Applications/Slack.app --level enhanced
 ```
 ```bash
-pearfin orphans
+deskmart orphans
 ```
 
-Run `pearfin help` for everything. Terminal needs Full Disk Access too for complete results.
+Run `deskmart help` for everything. Terminal needs Full Disk Access too for complete results.
 
 ### Links
 
-`pearfin://uninstall?path=/Applications/Foo.app` opens Pearfin and starts uninstalling that app (you still confirm).
-`pearfin://open?path=/Applications/Foo.app` just shows its files. Useful in Shortcuts and Raycast or Alfred.
+`deskmart://uninstall?path=/Applications/Foo.app` opens Deskmart and starts uninstalling that app (you still confirm).
+`deskmart://open?path=/Applications/Foo.app` just shows its files. Useful in Shortcuts and Raycast or Alfred.
 
 ### Keyboard
 
@@ -145,30 +145,30 @@ Run `pearfin help` for everything. Terminal needs Full Disk Access too for compl
 
 ### Updates
 
-Every time GitHub builds a new version, copies of Pearfin built by GitHub notice it on their own.
+Every time GitHub builds a new version, copies of Deskmart built by GitHub notice it on their own.
 A small dot appears next to **…** at the bottom of the sidebar, and that menu gains **Update Available…**.
-Updating means downloading the new `Pearfin.dmg` and replacing the app in Applications. Your settings stay.
+Updating means downloading the new `Deskmart.dmg` and replacing the app in Applications. Your settings stay.
 
 The check is one small request to GitHub, at most a few times a day. It only works if the repository is **public**,
 because GitHub doesn't show private repositories' releases without signing in. With a private repository, the check quietly does nothing.
 
 ### Good to know
 
-- Pearfin never deletes anything outright. It only moves things to the Trash. Empty the Trash when you're sure.
+- Deskmart never deletes anything outright. It only moves things to the Trash. Empty the Trash when you're sure.
 - Some locations are always protected, whatever a search finds: your home folder, `/Applications`, `/Library` and the standard Library folders themselves, and anything in the system volume.
 - The Updater sends your apps' bundle IDs to Apple (App Store lookups) and contacts each app's update feed, only when you check.
 - The interface is served only to the app itself, on `localhost`, with a per-launch key. Other devices on your network can't reach it.
-- Settings live in `~/Library/Application Support/Pearfin`. To uninstall Pearfin, turn off Sentinel and the Terminal command, then delete the app and that folder. Or use Pearfin on itself from another copy.
+- Settings live in `~/Library/Application Support/Deskmart`. To uninstall Deskmart, turn off Sentinel and the Terminal command, then delete the app and that folder. Or use Deskmart on itself from another copy.
 
 ---
 
 ## Differences from Pearcleaner
 
-| Pearcleaner | Pearfin |
+| Pearcleaner | Deskmart |
 | --- | --- |
 | Swift + SwiftUI, built with Xcode | Rust, interface in the Mac's WebKit, built by GitHub Actions without an Xcode project |
 | Privileged helper for system files | The standard macOS password prompt |
-| Finder extension | **Open With → Pearfin**, drop on the Dock icon, or `pearfin://` links |
+| Finder extension | **Open With → Deskmart**, drop on the Dock icon, or `deskmart://` links |
 | Full Disk Access check reads TCC.db (broken on macOS 27) | Checks protected folders directly; reports folders it couldn't read |
 | TCC permission viewer per app | Not included (macOS 27 blocks reading the TCC database) |
 | Installs iOS apps, Sparkle updates in-app | Installs Sparkle updates; App Store updates open in the App Store |
@@ -189,7 +189,7 @@ because GitHub doesn't show private repositories' releases without signing in. W
 | `src/sentinel.rs` | The Trash-watching background agent |
 | `src/api.rs` | Local HTTP API used by the interface |
 | `src/gui.rs` | Native window (tao + wry + muda) |
-| `src/cli.rs` | The `pearfin` Terminal command |
+| `src/cli.rs` | The `deskmart` Terminal command |
 | `web/index.html` | The whole interface (HTML/CSS/JS, embedded in the binary) |
 | `scripts/bundle-macos.sh` | Builds the universal `.app`, `.dmg` and `.zip` on a Mac |
 
@@ -213,8 +213,8 @@ cargo test --no-default-features
 
 ## License and credits
 
-Pearfin is based on [Pearcleaner](https://github.com/alienator88/Pearcleaner) by alienator88 and keeps its license:
+Deskmart is based on [Pearcleaner](https://github.com/alienator88/Pearcleaner) by alienator88 and keeps its license:
 **Apache 2.0 with the Commons Clause**. You can use, change and share it, but not sell it. See `LICENSE.md` and `NOTICE.md`.
-Pearfin isn't affiliated with or endorsed by the Pearcleaner author.
+Deskmart isn't affiliated with or endorsed by the Pearcleaner author.
 
 Icons: [Font Awesome Free](https://fontawesome.com) (icons CC BY 4.0, font SIL OFL 1.1), bundled in `web/fa/`.

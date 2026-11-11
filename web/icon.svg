@@ -1,9 +1,17 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
   <rect width="512" height="512" rx="114" fill="#6a5cff"/>
-  <path d="M262 128q4-38 34-58" fill="none" stroke="#ffffff" stroke-width="20" stroke-linecap="round"/>
-  <ellipse cx="318" cy="98" rx="40" ry="18" transform="rotate(-28 318 98)" fill="#ffffff"/>
-  <path d="M256 126c-42 0-66 34-66 76 0 26-10 42-31 64-27 29-43 58-43 95 0 72 60 121 140 121s140-49 140-121c0-37-16-66-43-95-21-22-31-38-31-64 0-42-24-76-66-76z" fill="#ffffff"/>
-  <path d="M256 244c6 44 20 58 64 64-44 6-58 20-64 64-6-44-20-58-64-64 44-6 58-20 64-64z" fill="#6a5cff"/>
-  <circle cx="318" cy="380" r="14" fill="#6a5cff"/>
-  <circle cx="196" cy="236" r="10" fill="#6a5cff"/>
+  <!-- monitor -->
+  <rect x="128" y="104" width="256" height="178" rx="28" fill="#ffffff"/>
+  <rect x="236" y="278" width="40" height="40" fill="#ffffff"/>
+  <rect x="190" y="310" width="132" height="18" rx="9" fill="#ffffff"/>
+  <!-- sparkle on the screen -->
+  <path d="M256 140c6 40 18 52 58 58-40 6-52 18-58 58-6-40-18-52-58-58 40-6 52-18 58-58z" fill="#6a5cff"/>
+  <circle cx="330" cy="146" r="11" fill="#6a5cff"/>
+  <circle cx="184" cy="246" r="8" fill="#6a5cff"/>
+  <!-- desk -->
+  <rect x="76" y="340" width="360" height="30" rx="15" fill="#ffffff"/>
+  <rect x="106" y="362" width="28" height="78" rx="12" fill="#ffffff"/>
+  <rect x="378" y="362" width="28" height="78" rx="12" fill="#ffffff"/>
+  <rect x="300" y="362" width="78" height="44" rx="10" fill="#ffffff"/>
+  <rect x="324" y="380" width="30" height="8" rx="4" fill="#6a5cff"/>
 </svg>

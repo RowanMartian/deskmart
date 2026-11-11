@@ -2067,7 +2067,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "pearfin"
+name = "deskmart"
 version = "1.0.0"
 dependencies = [
  "anyhow",

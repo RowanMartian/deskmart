@@ -83,9 +83,9 @@ pub fn home() -> String {
 }
 pub fn data_dir() -> PathBuf {
     if cfg!(target_os = "macos") {
-        home_dir().join("Library/Application Support/Pearfin")
+        home_dir().join("Library/Application Support/Deskmart")
     } else {
-        std::env::var_os("XDG_CONFIG_HOME").map(PathBuf::from).unwrap_or_else(|| home_dir().join(".config")).join("pearfin")
+        std::env::var_os("XDG_CONFIG_HOME").map(PathBuf::from).unwrap_or_else(|| home_dir().join(".config")).join("deskmart")
     }
 }
 pub fn trash_dir() -> PathBuf {
@@ -391,7 +391,7 @@ impl Console {
     }
     pub fn log(&self, source: &str, msg: impl Into<String>) {
         let msg = msg.into();
-        if std::env::var_os("PEARFIN_VERBOSE").is_some() {
+        if std::env::var_os("DESKMART_VERBOSE").is_some() {
             eprintln!("[{source}] {msg}");
         }
         let id = self.seq.fetch_add(1, std::sync::atomic::Ordering::SeqCst) + 1;

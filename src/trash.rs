@@ -73,7 +73,7 @@ fn safe_folder_name(name: &str) -> String {
     let n: String = name.chars().map(|c| if c == '/' || c == ':' { '-' } else { c }).collect();
     let n = n.trim().trim_start_matches('.').to_string();
     if n.is_empty() {
-        "Pearfin".into()
+        "Deskmart".into()
     } else {
         n.chars().take(80).collect()
     }
@@ -153,7 +153,7 @@ pub fn trash(paths: &[String], name: &str, app_folders: &[String], history_file:
             .collect::<Vec<_>>()
             .join("; ");
         let names = if admin.len() == 1 { file_name(&admin[0].0) } else { format!("{} items", admin.len()) };
-        match run_as_admin(&script, &format!("Pearfin wants to move {names} to the Trash.")) {
+        match run_as_admin(&script, &format!("Deskmart wants to move {names} to the Trash.")) {
             Ok(_) => {
                 for (src, dst) in admin {
                     if exists(&dst) && !exists(&src) {
@@ -194,7 +194,7 @@ pub fn trash(paths: &[String], name: &str, app_folders: &[String], history_file:
 }
 
 pub fn permission_hint() -> String {
-    "macOS blocked this. Give Pearfin Full Disk Access and App Management in System Settings → Privacy & Security.".into()
+    "macOS blocked this. Give Deskmart Full Disk Access and App Management in System Settings → Privacy & Security.".into()
 }
 
 pub fn load_history(file: &Path) -> Vec<Record> {
@@ -233,7 +233,7 @@ pub fn restore(rec: &Record) -> (usize, Vec<(String, String)>) {
     }
     if !admin.is_empty() {
         let script = admin.iter().map(|p| format!("/bin/mv -f {} {}", sh_quote(&p.trashed), sh_quote(&p.original))).collect::<Vec<_>>().join("; ");
-        match run_as_admin(&script, "Pearfin wants to put files back where they were.") {
+        match run_as_admin(&script, "Deskmart wants to put files back where they were.") {
             Ok(_) => {
                 for p in admin {
                     if exists(&p.original) {

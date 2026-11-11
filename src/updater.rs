@@ -13,7 +13,7 @@ use std::time::Duration;
 fn client() -> reqwest::blocking::Client {
     reqwest::blocking::Client::builder()
         .timeout(Duration::from_secs(20))
-        .user_agent(format!("Pearfin/{} Sparkle/2", crate::api::VERSION))
+        .user_agent(format!("Deskmart/{} Sparkle/2", crate::api::VERSION))
         .build()
         .expect("http client")
 }
@@ -245,9 +245,9 @@ pub fn install_sparkle(ctx: &Ctx, app: &AppInfo, cfg: &Settings, history: &Path)
     items.sort_by(|x, y| cmp_versions(&y.version, &x.version));
     let item = items.into_iter().next().ok_or("The feed lists no update.")?;
     if !item.url.starts_with("https://") {
-        return Err("The update isn't offered over a secure connection, so Pearfin won't install it. Use the app's own updater.".into());
+        return Err("The update isn't offered over a secure connection, so Deskmart won't install it. Use the app's own updater.".into());
     }
-    let work = std::env::temp_dir().join(format!("pearfin-update-{}", now_ms()));
+    let work = std::env::temp_dir().join(format!("deskmart-update-{}", now_ms()));
     std::fs::create_dir_all(&work).map_err(|e| e.to_string())?;
     let file = work.join(file_name(item.url.split('?').next().unwrap_or("update")));
     ctx.log(format!("Downloading {}", item.url));
@@ -351,7 +351,7 @@ pub fn install_sparkle(ctx: &Ctx, app: &AppInfo, cfg: &Settings, history: &Path)
     let o = cmd("/usr/bin/ditto", &[&staged.to_string_lossy(), &target], Duration::from_secs(600));
     if !o.ok {
         let script = format!("/usr/bin/ditto {} {}", sh_quote(&staged.to_string_lossy()), sh_quote(&target));
-        run_as_admin(&script, &format!("Pearfin wants to install the update for {}.", app.name))?;
+        run_as_admin(&script, &format!("Deskmart wants to install the update for {}.", app.name))?;
     }
     let _ = std::fs::remove_dir_all(&work);
     let shown = if item.short.is_empty() { item.version } else { item.short };
